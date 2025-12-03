@@ -1,0 +1,9 @@
+{
+  "default_provider": "deepseek",
+  "default_model": "deepseek-chat",
+  "default_max_tokens": 2048,
+  "default_dataset_path": "data/dev.json",
+  "default_output_dir": "outputs/",
+  "default_num_samples": 100,
+  "default_technique": "zeroshot"
+}
