@@ -7,18 +7,20 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, Iterable, List
 
+from dotenv import load_dotenv
 from tqdm import tqdm
 
 from src.llm.deepseek_client import DeepSeekChatLLM
 from src.prompts.zero_shot import build_zero_shot_prompt
 from src.utils.text import clean_sql_text
 
+# Load environment variables for API keys.
+load_dotenv()
+
 
 @dataclass
 class Candidate:
     sql: str
-    token_logprobs: List[float]
-    total_logprob: float
 
 
 class PredictionGenerator:
@@ -49,20 +51,23 @@ class PredictionGenerator:
 
         generated_entries: List[Dict] = []
         for idx, record in enumerate(tqdm(records, desc="Generating SQL", unit="question")):
+            self.logger.info("Processing question %s: %s", record.get("q_id", idx), record["question"])
+            self.logger.info("Schema for %s:\n%s", record["db_id"], record["schema"])
             prompt = build_zero_shot_prompt(record["question"], record["schema"])
             candidates: List[Candidate] = []
             self.logger.info("Generating SQL using user prompt: %s", prompt)
 
             for _ in range(self.num_query):
-                sql_text= self.llm.generate_sql(prompt)
+                sql_text = self.llm.generate_sql(prompt)
                 cleaned_sql = clean_sql_text(sql_text)
-                candidates.append(
-                    Candidate(sql=cleaned_sql)
-                )
+                candidates.append(Candidate(sql=cleaned_sql))
                 self.logger.info("Generated SQL: %s", cleaned_sql)
-                
+
                 if self.delay > 0.0:
                     time.sleep(self.delay)
+
+            all_sql = [candidate.sql for candidate in candidates]
+            self.logger.info("All candidates for question %s: %s", record.get("q_id", idx), all_sql)
 
             generated_entries.append(
                 {

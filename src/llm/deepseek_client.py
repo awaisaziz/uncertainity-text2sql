@@ -2,8 +2,6 @@
 from __future__ import annotations
 
 import os
-from dataclasses import dataclass
-from typing import List, Tuple
 
 from openai import OpenAI
 from openai.types.chat import ChatCompletion
@@ -12,14 +10,8 @@ from dotenv import load_dotenv
 # Load .env variables once at module import
 load_dotenv()
 
-@dataclass
-class DeepSeekSQLResult:
-    """Structured result for a single SQL generation."""
-
-    sql_text: str
-
 SYSTEM_PROMPT = """
-You are an expert Text-to-SQL generator. Use the provided database schema to produce a correct SQL query that answers the question. 
+You are an expert Text-to-SQL generator. Use the provided database schema to produce a correct SQL query that answers the question.
 Do not use table aliases. Return only the SQL query.
 """.strip()
 
@@ -36,12 +28,12 @@ class DeepSeekChatLLM:
         self.max_tokens = max_tokens
         self.temperature = temperature
 
-    def generate_sql(self, prompt: str) -> Tuple[str, List[float], float]:
-        """Generate SQL for a given prompt and return text plus logprob details."""
+    def generate_sql(self, prompt: str) -> str:
+        """Generate SQL for a given prompt."""
 
         resp: ChatCompletion = self.client.chat.completions.create(
             model="deepseek-chat",
-            
+
             messages=[
                 {"role": "system", "content": SYSTEM_PROMPT},
                 {"role": "user", "content": prompt}
@@ -49,7 +41,7 @@ class DeepSeekChatLLM:
             max_tokens=self.max_tokens,
             temperature=self.temperature,
         )
-        
+
         sql_text = self._extract_text(resp)
         return sql_text
 
