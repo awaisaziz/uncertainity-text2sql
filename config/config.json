@@ -4,8 +4,8 @@
   "default_model": "deepseek-chat",
   "prompting_technique": "zero_shot",
   "num_sample": 1,
-  "num_query": 3,
+  "num_query": 1,
   "max_tokens": 2048,
   "request_delay": 0.0,
-  "output_file": "outputs/predictions_deepseek.json"
+  "output_file": "outputs/llm/deepseek_chat_one_candidate_query.json"
 }

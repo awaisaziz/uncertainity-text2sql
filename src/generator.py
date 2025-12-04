@@ -51,8 +51,9 @@ class PredictionGenerator:
 
         generated_entries: List[Dict] = []
         for idx, record in enumerate(tqdm(records, desc="Generating SQL", unit="question")):
-            self.logger.info("Processing question %s: %s", record.get("q_id", idx), record["question"])
-            self.logger.info("Schema for %s:\n%s", record["db_id"], record["schema"])
+            # self.logger.info("Processing question %s: %s", record.get("q_id", idx), record["question"])
+            # self.logger.info("Schema for %s:\n%s", record["db_id"], record["schema"])
+            
             prompt = build_zero_shot_prompt(record["question"], record["schema"])
             candidates: List[Candidate] = []
             self.logger.info("Generating SQL using user prompt: %s", prompt)

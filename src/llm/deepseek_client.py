@@ -12,7 +12,7 @@ load_dotenv()
 
 SYSTEM_PROMPT = """
 You are an expert Text-to-SQL generator. Use the provided database schema to produce a correct SQL query that answers the question.
-Do not use table aliases. Return only the SQL query.
+Do not use aliases in SQL query. Return only the SQL query.
 """.strip()
 
 class DeepSeekChatLLM:

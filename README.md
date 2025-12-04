@@ -34,6 +34,9 @@ Defaults live in `config/config.json`:
   "output_file": "outputs/predictions_deepseek.json"
 }
 ```
+## Notes
+- The `request_delay` setting helps avoid rate limits when using real APIs.
+
 You can override any of these via CLI flags.
 
 ## Environment Setup (run from repo root)
@@ -78,5 +81,29 @@ Logs will be written to `logs/run_<timestamp>.log`, with a single file capturing
 }
 ```
 
-## Notes
-- The `request_delay` setting helps avoid rate limits when using real APIs.
+## SQL Extraction
+
+Use `sql_extract.py` to extract all the required sql queries from the output predicted files and store only the sql queries in a separate folder. Later this file will be used for evaluation to report the results. There are 2 modes `simple` means take the first sql query from the candidate and second `sac` is to take the best sql from 3 different techniques softmax, GMM and hybrid.
+
+```bash
+python sql_extract.py --input_path outputs/llm/predictions_deepseek_chat_100.json --output_dir extracted_sql_for_evaluation/ --mode simple
+```
+
+and for using the sac mode we have the following prompt
+```bash
+python sql_extract.py --input_path outputs/llm/predictions_deepseek_chat_100.json --output_dir extracted_sql_for_evaluation/ --mode sac
+```
+
+## Evaluation
+
+Use `evaluate.py` to call the official Spider evaluation script and obtain exact match and execution accuracy metrics:
+
+```bash
+python install.py
+```
+
+```bash
+python evaluation.py --gold spider_data/dev_gold.sql --db spider_data/database --table spider_data/tables.json --pred extracted_sql_for_evaluation/predictions_deepseek_chat_100_simple.sql --etype all
+```
+
+The script will create a temporary `.sql` file, run `spider_data/evaluate.py`, and print the reported metrics.
