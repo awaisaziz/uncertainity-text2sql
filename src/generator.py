@@ -1,77 +1,95 @@
+"""SQL generation pipeline using the DeepSeek chat model."""
+from __future__ import annotations
+
 import json
 import time
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, Iterable, List
 
-from tqdm import tqdm  # Added tqdm for progress bar
+from tqdm import tqdm
 
-from src.prompts.zero_shot import ZeroShotPromptBuilder
-from src.providers.base import LLMProvider, LLMResponse
+from src.llm.deepseek_client import DeepSeekChatLLM
+from src.prompts.zero_shot import build_zero_shot_prompt
 from src.utils.text import clean_sql_text
 
 
+@dataclass
+class Candidate:
+    sql: str
+    token_logprobs: List[float]
+    total_logprob: float
+
+
 class PredictionGenerator:
+    """Generate SQL predictions for a list of Spider questions."""
+
     def __init__(
         self,
-        provider: LLMProvider,
-        prompt_builder: ZeroShotPromptBuilder,
-        model: str,
+        llm: DeepSeekChatLLM,
+        *,
         num_query: int,
         max_tokens: int,
         delay: float,
+        num_sample: int,
         logger,
-        num_sample: int = 1,  # Added parameter for limiting sample size
-    ):
-        self.provider = provider
-        self.prompt_builder = prompt_builder
-        self.model = model
+    ) -> None:
+        self.llm = llm
         self.num_query = num_query
         self.max_tokens = max_tokens
         self.delay = delay
-        self.logger = logger
         self.num_sample = num_sample
+        self.logger = logger
 
-    def generate(self, records: Iterable[Dict], output_file: Path) -> None:
+    def generate(self, records: Iterable[Dict], output_file: Path, config: Dict) -> None:
+        """Generate SQL predictions and write them to ``output_file``."""
+
         output_file.parent.mkdir(parents=True, exist_ok=True)
-        results: List[Dict] = []
+        records = list(records)[: self.num_sample]
 
-        # Convert to list to allow slicing
-        records = list(records)[:self.num_sample]
+        generated_entries: List[Dict] = []
+        for idx, record in enumerate(tqdm(records, desc="Generating SQL", unit="question")):
+            prompt = build_zero_shot_prompt(record["question"], record["schema"])
+            candidates: List[Candidate] = []
+            self.logger.info("Generating SQL using user prompt: %s", prompt)
 
-        # Wrap with tqdm for progress visualization
-        for record in tqdm(records, desc="Generating SQL Predictions", unit="record"):
-            prompt = self.prompt_builder.build(
-                question=record["question"],
-                schema=record["schema"],
-                db_id=record["db_id"],
-                num_query=self.num_query,
+            for _ in range(self.num_query):
+                sql_text= self.llm.generate_sql(prompt)
+                cleaned_sql = clean_sql_text(sql_text)
+                candidates.append(
+                    Candidate(sql=cleaned_sql)
+                )
+                self.logger.info("Generated SQL: %s", cleaned_sql)
+                
+                if self.delay > 0.0:
+                    time.sleep(self.delay)
+
+            generated_entries.append(
+                {
+                    "id": idx,
+                    "question": record["question"],
+                    "db_id": record["db_id"],
+                    "candidates": [
+                        {
+                            "sql": candidate.sql
+                        }
+                        for candidate in candidates
+                    ],
+                }
             )
 
-            self.logger.info("Sending prompt for question %s to %s", record.get("q_id"), self.provider.name)
+        output_payload = {
+            "dataset_path": str(Path(config["dataset_path"])),
+            "default_provider": "deepseek",
+            "default_model": "deepseek-chat",
+            "prompting_technique": config.get("prompting_technique", "zero_shot"),
+            "num_sample": self.num_sample,
+            "num_query": self.num_query,
+            "max_tokens": self.max_tokens,
+            "generated": generated_entries,
+        }
 
-            response: LLMResponse = self.provider.generate_sql(
-                prompt=prompt,
-                model=self.model,
-                max_tokens=self.max_tokens,
-                metadata={"db_id": record["db_id"]},
-            )
-
-            clean_sql = clean_sql_text(response.sql)
-            result_entry = {
-                "question_id": record.get("q_id"),
-                "db_id": record["db_id"],
-                "question": record["question"],
-                "schema": record["schema"],
-                "sql": clean_sql,
-                "logit_prob": response.logit_prob,
-            }
-
-            results.append(result_entry)
-            self.logger.info("Received SQL for %s: %s", record.get("q_id"), clean_sql)
-            time.sleep(self.delay)
-
-        # Write results to JSON file
         with output_file.open("w", encoding="utf-8") as f:
-            json.dump(results, f, indent=2)
+            json.dump(output_payload, f, indent=2)
 
         self.logger.info("Stored predictions at %s", output_file)

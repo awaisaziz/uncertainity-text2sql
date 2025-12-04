@@ -1,10 +1,11 @@
 {
   "dataset_path": "./spider_data/",
-  "default_provider": "openrouter",
-  "default_model": "tngtech/deepseek-r1t-chimera:free",
-  "default_prompting_technique": "zero_shot",
-  "num_query": 2,
+  "default_provider": "deepseek",
+  "default_model": "deepseek-chat",
+  "prompting_technique": "zero_shot",
+  "num_sample": 1,
+  "num_query": 3,
   "max_tokens": 2048,
-  "request_delay": 5.0,
-  "output_file": "outputs/predicted_openrouter-deepseek-chat.json"
+  "request_delay": 0.0,
+  "output_file": "outputs/predictions_deepseek.json"
 }

@@ -50,14 +50,7 @@ You can override any of these via CLI flags.
 ## Running
 From the repository root:
 ```bash
-python main.py \
-  --dataset_path /path/to/spider_data \
-  --provider openrouter \
-  --model openrouter/deepseek-chat \
-  --technique zero_shot \
-  --num_query 1 \
-  --output_file outputs/predicted_openrouter.json \
-  --request_delay 35.0
+python main.py --dataset_path spider_data/ --request_delay 5.0 --provider openrouter --model tngtech/deepseek-r1t-chimera:free --technique zero_shot --num_query 1 --output_file outputs/predicted_openrouter.json
 ```
 
 Logs will be written to `logs/run_<timestamp>.log`. The outputs file contains entries shaped like:
