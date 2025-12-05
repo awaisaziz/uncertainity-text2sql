@@ -1,6 +1,6 @@
 # Uncertainty Text2SQL
 
-Simple Text-to-SQL pipeline that reads the Spider dataset, builds schema-aware prompts, and sends questions to the DeepSeek Chat model. The script writes generated SQL candidates to JSON and records detailed logs for each run.
+Simple Text-to-SQL pipeline that reads the Spider dataset, builds schema-aware prompts, and sends questions to the DeepSeek Chat model. The script writes generated SQL candidates to JSON and records detailed logs for each run. Each request now asks the model to return multiple candidate SQL queries in a single JSON array response.
 
 ## Project layout
 - `main.py` – entry point; orchestrates loading data, building prompts, and writing outputs.
@@ -36,6 +36,7 @@ Defaults live in `config/config.json`:
 }
 ```
 ## Notes
+- The `num_query` setting controls how many SQL candidates are requested in a single LLM response. The prompt expects the model to return a JSON array with exactly this many `sql` entries.
 - The `request_delay` setting helps avoid rate limits when using real APIs.
 - `mode` controls whether the CLI runs online generation (`generate`) or offline reranking (`rerank`).
 
@@ -70,17 +71,43 @@ Logs will be written to `logs/run_<timestamp>.log`, with a single file capturing
   "max_tokens": 2048,
   "generated": [
     {
-      "id": 0,
-      "question": "How many singers do we have?",
-      "db_id": "concert_singer",
-      "candidates": [
-        { "sql": "SELECT COUNT(*) FROM singers;" },
+        "id": 0,
+        "question": "How many singers do we have?",
+        "db_id": "concert_singer",
+        "candidates": [
         { "sql": "SELECT COUNT(*) FROM singer;" },
-        { "sql": "SELECT COUNT(*) AS count FROM singer;" }
-      ]
-    }
-  ]
+        { "sql": "SELECT COUNT(singer_id) FROM singer;" },
+        { "sql": "SELECT COUNT(*) FROM (SELECT DISTINCT singer_id FROM singer) t;" }
+        ]
+      }
+    ]
 }
+```
+
+The zero-shot prompt used for generation is:
+
+```
+Given the following database schema:
+{schema}
+
+Question: {question}
+
+Generate exactly n different, correct SQL queries. Return ONLY a JSON array in this format:
+[{"sql": "full SQL query here"}, {"sql": "full SQL query here"}, ..., {"sql": "full SQL query here"}]
+
+IMPORTANT RULES:
+1. Each query must use a distinct SQL approach (different tables, joins, subqueries, aggregation methods)
+2. Only use "AS" for table aliases when joining the same table or to avoid ambiguous column names
+   Example where AS IS ALLOWED: "SELECT T2.Year ,  T1.Official_Name FROM city AS T1 JOIN farm_competition AS T2 ON T1.City_ID  =  T2.Host_city_ID" or "SELECT avg(T1.product_price) FROM Products AS T1 JOIN Order_items AS T2 ON T1.product_id  =  T2.product_id"
+   Example where AS IS PROHIBITED: "SELECT avg(product_price) AS average_price FROM Products" or "SELECT count(*) AS count FROM club"
+3. Never add column aliases - use original column names from schema
+4. All queries must return the same logical result
+5. No explanations or additional text outside the JSON array
+
+Example of correct output for n=2:
+[{"sql": "SELECT count(*) FROM club"}, {"sql": "SELECT T1.gender_code ,  count(*) FROM Customers AS T1 JOIN Orders AS T2 ON T1.customer_id  =  T2.customer_id JOIN Order_items AS T3 ON T2.order_id  =  T3.order_id GROUP BY T1.gender_code"}]
+
+Return only the JSON array with exactly {n} objects.
 ```
 
 ### Offline reranking

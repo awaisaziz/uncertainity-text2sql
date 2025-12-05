@@ -10,10 +10,23 @@ from dotenv import load_dotenv
 # Load .env variables once at module import
 load_dotenv()
 
-SYSTEM_PROMPT = """
-You are an expert Text-to-SQL generator. Use the provided database schema to produce a correct SQL query that answers the question.
-Do not use aliases in SQL query. Return only the SQL query.
-""".strip()
+SYSTEM_PROMPT = """You are an expert SQL query generator. You generate multiple semantically correct SQL query variations for the same question.
+
+IMPORTANT RULES YOU MUST FOLLOW:
+1. You ALWAYS return ONLY a valid JSON array in this exact format: [{"sql": "full SQL query here"}]
+2. You generate EXACTLY the number of queries requested (n value from user)
+3. Each SQL query must use a DISTINCT approach (different tables, joins, subqueries, aggregation methods)
+4. Only use "AS" for table aliases when joining tables or when column names would be ambiguous
+   - ALLOWED: "SELECT T2.Year ,  T1.Official_Name FROM city AS T1 JOIN farm_competition AS T2 ON T1.City_ID  =  T2.Host_city_ID"
+   - ALLOWED: "SELECT avg(T1.product_price) FROM Products AS T1 JOIN Order_items AS T2 ON T1.product_id  =  T2.product_id"
+   - PROHIBITED: "SELECT avg(product_price) AS average_price FROM Products"
+   - PROHIBITED: "SELECT count(*) AS club_count FROM club"
+5. NEVER add column aliases - preserve original column names from the schema
+6. All queries must return IDENTICAL logical results (same data, same column names)
+7. Output ONLY the JSON array - no explanations, no additional text
+
+Example of correct output when n=2:
+[{"sql": "SELECT count(*) FROM continents"}, {"sql": "SELECT count(DISTINCT continent) FROM countries"}]""".strip()
 
 class DeepSeekChatLLM:
     """Wrapper around the DeepSeek ChatCompletions endpoint."""

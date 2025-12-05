@@ -2,17 +2,17 @@
 from __future__ import annotations
 
 import json
-import time
 from dataclasses import dataclass
 from pathlib import Path
+import time
 from typing import Dict, Iterable, List
 
 from dotenv import load_dotenv
 from tqdm import tqdm
 
 from src.llm.deepseek_client import DeepSeekChatLLM
-from src.prompts.zero_shot import build_zero_shot_prompt
-from src.utils.text import clean_sql_text
+from src.prompts.zero_shot import build_multi_sql_prompt
+from src.utils.text import clean_sql_text, clean_json_array
 
 # Load environment variables for API keys.
 load_dotenv()
@@ -51,21 +51,44 @@ class PredictionGenerator:
 
         generated_entries: List[Dict] = []
         for idx, record in enumerate(tqdm(records, desc="Generating SQL", unit="question")):
+
+            if self.delay > 0:
+                time.sleep(self.delay)
+
             # self.logger.info("Processing question %s: %s", record.get("q_id", idx), record["question"])
             # self.logger.info("Schema for %s:\n%s", record["db_id"], record["schema"])
             
-            prompt = build_zero_shot_prompt(record["question"], record["schema"])
-            candidates: List[Candidate] = []
+            prompt = build_multi_sql_prompt(
+                record["question"], record["schema"], self.num_query
+            )
             self.logger.info("Generating SQL using user prompt: %s", prompt)
 
-            for _ in range(self.num_query):
-                sql_text = self.llm.generate_sql(prompt)
-                cleaned_sql = clean_sql_text(sql_text)
-                candidates.append(Candidate(sql=cleaned_sql))
-                self.logger.info("Generated SQL: %s", cleaned_sql)
+            sql_text = self.llm.generate_sql(prompt)
+            self.logger.info("Raw LLM response: %s", sql_text)
 
-                if self.delay > 0.0:
-                    time.sleep(self.delay)
+            # ---- Extract structured candidates safely ----
+            parsed_candidates = clean_json_array(sql_text)
+
+            # Fallback if clean_json_array failed
+            if parsed_candidates is None:
+                parsed_candidates = [{"sql": clean_sql_text(sql_text)}]
+
+            # If the model returned a single dict, wrap it
+            elif isinstance(parsed_candidates, dict):
+                parsed_candidates = [parsed_candidates]
+
+            # If the model returned something else unexpected
+            elif not isinstance(parsed_candidates, list):
+                parsed_candidates = [parsed_candidates]
+
+            # ---- Normalize each candidate to ensure `{"sql": "<query>"}` format ----
+            candidates = []
+            for item in parsed_candidates[: self.num_query]:
+                if isinstance(item, dict) and "sql" in item:
+                    sql_value = clean_sql_text(item["sql"])
+                else:
+                    sql_value = clean_sql_text(str(item))
+                candidates.append(Candidate(sql=sql_value))
 
             all_sql = [candidate.sql for candidate in candidates]
             self.logger.info("All candidates for question %s: %s", record.get("q_id", idx), all_sql)
