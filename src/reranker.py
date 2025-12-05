@@ -131,7 +131,9 @@ def run_reranking(
     with input_path.open("r", encoding="utf-8") as f:
         input_payload = json.load(f)
 
-    model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+    # model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+    # model = SentenceTransformer("sentence-transformers/sentence-t5-base")
+    model = SentenceTransformer("thenlper/gte-large")
 
     generated_entries = input_payload.get("generated", [])
     reranked_entries = [
