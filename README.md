@@ -4,7 +4,7 @@ Simple Text-to-SQL pipeline that reads the Spider dataset, builds schema-aware p
 
 ## Project layout
 - `main.py` – entry point; orchestrates loading data, building prompts, and writing outputs.
-- `config/config.json` – default runtime configuration (paths, provider/model, delay, output target).
+- `config/config.json` – default runtime configuration (paths, provider/model, delay, mode, and output targets).
 - `src/dataset/loader.py` – helpers to load `dev.json` and `tables.json` and pair questions with schemas.
 - `src/prompts/` – prompt builders (currently zero-shot with system/user separation).
 - `src/llm/` – DeepSeek Chat client (loads `.env` for the API key).
@@ -26,16 +26,18 @@ Defaults live in `config/config.json`:
   "dataset_path": "./spider_data/",
   "default_provider": "deepseek",
   "default_model": "deepseek-chat",
-  "prompting_technique": "zero_shot",
   "num_sample": 1,
-  "num_query": 3,
+  "num_query": 1,
   "max_tokens": 2048,
   "request_delay": 0.0,
-  "output_file": "outputs/predictions_deepseek.json"
+  "mode": "generate",
+  "output_llm": "outputs/llm/deepseek_chat_one_candidate_query.json",
+  "output_rerank": "outputs/reranked/deepseek_chat_one_candidate_query_reranked.json"
 }
 ```
 ## Notes
 - The `request_delay` setting helps avoid rate limits when using real APIs.
+- `mode` controls whether the CLI runs online generation (`generate`) or offline reranking (`rerank`).
 
 You can override any of these via CLI flags.
 
@@ -53,16 +55,16 @@ You can override any of these via CLI flags.
 ## Running
 From the repository root:
 ```bash
-python main.py --dataset_path spider_data/ --num_sample 1 --num_query 3 --max_tokens 2048 --output_file outputs/predictions_deepseek.json
+python main.py --mode generate --dataset_path spider_data/ --num_sample 1 --num_query 3 --max_tokens 2048 --output_llm outputs/llm/predictions_deepseek.json
 ```
 
-Logs will be written to `logs/run_<timestamp>.log`, with a single file capturing the full session. The outputs file contains entries shaped like:
+Logs will be written to `logs/run_<timestamp>.log`, with a single file capturing the full session. The generation output contains entries shaped like:
 ```json
 {
   "dataset_path": "spider_data",
   "default_provider": "deepseek",
   "default_model": "deepseek-chat",
-  "prompting_technique": "zero_shot",
+  "mode": "generate",
   "num_sample": 1,
   "num_query": 3,
   "max_tokens": 2048,
@@ -80,6 +82,15 @@ Logs will be written to `logs/run_<timestamp>.log`, with a single file capturing
   ]
 }
 ```
+
+### Offline reranking
+After collecting LLM outputs, run the semantic consensus reranker:
+
+```bash
+python main.py --mode rerank --output_llm outputs/llm/predictions_deepseek.json --output_rerank outputs/reranked/predictions_deepseek_reranked.json
+```
+
+The reranker computes cosine similarity, consensus, softmax probabilities, GMM posteriors, semantic entropy, GMM entropy, and three strategies (softmax-only, GMM-only, hybrid). It writes both the specified reranked file and a convenience copy named `reranked_output.json` inside the reranked output directory.
 
 ## SQL Extraction
 

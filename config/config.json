@@ -2,10 +2,11 @@
   "dataset_path": "./spider_data/",
   "default_provider": "deepseek",
   "default_model": "deepseek-chat",
-  "prompting_technique": "zero_shot",
   "num_sample": 1,
   "num_query": 1,
   "max_tokens": 2048,
   "request_delay": 0.0,
-  "output_file": "outputs/llm/deepseek_chat_one_candidate_query.json"
+  "mode": "rerank",
+  "output_llm": "outputs/llm/deepseek_chat_one_candidate_query.json",
+  "output_rerank": "outputs/reranked/deepseek_chat_one_candidate_query_reranked.json"
 }

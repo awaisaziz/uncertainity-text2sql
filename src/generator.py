@@ -88,7 +88,7 @@ class PredictionGenerator:
             "dataset_path": str(Path(config["dataset_path"])),
             "default_provider": "deepseek",
             "default_model": "deepseek-chat",
-            "prompting_technique": config.get("prompting_technique", "zero_shot"),
+            "mode": "generate",
             "num_sample": self.num_sample,
             "num_query": self.num_query,
             "max_tokens": self.max_tokens,
