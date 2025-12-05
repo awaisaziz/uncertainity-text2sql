@@ -7,6 +7,6 @@
   "max_tokens": 2048,
   "request_delay": 0.0,
   "mode": "rerank",
-  "output_llm": "outputs/llm/deepseek_chat_one_candidate_query.json",
-  "output_rerank": "outputs/reranked/deepseek_chat_one_candidate_query_reranked.json"
+  "output_llm": "outputs/llm/deepseek_chat_five_candidate_query.json",
+  "output_rerank": "outputs/reranked/deepseek_chat_five_candidate_query_reranked.json"
 }

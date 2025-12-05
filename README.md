@@ -55,7 +55,7 @@ You can override any of these via CLI flags.
 ## Running
 From the repository root:
 ```bash
-python main.py --mode generate --dataset_path spider_data/ --num_sample 1 --num_query 3 --max_tokens 2048 --output_llm outputs/llm/predictions_deepseek.json
+python main.py --mode generate --dataset_path spider_data/ --num_sample 100 --num_query 1 --max_tokens 6000 --output_llm outputs/llm/predictions_deepseek.json
 ```
 
 Logs will be written to `logs/run_<timestamp>.log`, with a single file capturing the full session. The generation output contains entries shaped like:

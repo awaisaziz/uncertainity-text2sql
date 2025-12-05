@@ -57,9 +57,9 @@ def rerank_question(
             "selected_sql_hybrid": None,
         }
 
-    question_embedding = model.encode(question_text, normalize_embeddings=False, convert_to_numpy=True)
+    question_embedding = model.encode(question_text, normalize_embeddings=True, convert_to_numpy=True)
     sql_texts = [cand["sql"] for cand in candidates]
-    sql_embeddings = model.encode(sql_texts, normalize_embeddings=False, convert_to_numpy=True)
+    sql_embeddings = model.encode(sql_texts, normalize_embeddings=True, convert_to_numpy=True)
 
     cos_scores: List[float] = [
         cosine_similarity(question_embedding, sql_embedding)
@@ -152,11 +152,6 @@ def run_reranking(
     output_path.parent.mkdir(parents=True, exist_ok=True)
     with output_path.open("w", encoding="utf-8") as f:
         json.dump(output_payload, f, indent=2)
-
-    if output_path.name != "reranked_output.json":
-        alias_path = output_path.parent / "reranked_output.json"
-        with alias_path.open("w", encoding="utf-8") as alias_file:
-            json.dump(output_payload, alias_file, indent=2)
 
     logger.info("Reranked output written to %s", output_path)
 
