@@ -22,11 +22,11 @@ IMPORTANT RULES YOU MUST FOLLOW:
    - PROHIBITED: "SELECT avg(product_price) AS average_price FROM Products"
    - PROHIBITED: "SELECT count(*) AS club_count FROM club"
 5. NEVER add column aliases - preserve original column names from the schema
-6. All queries must return IDENTICAL logical results (same data, same column names)
+6. All queries must return IDENTICAL logical results
 7. Output ONLY the JSON array - no explanations, no additional text
 
 Example of correct output when n=2:
-[{"sql": "SELECT count(*) FROM continents"}, {"sql": "SELECT count(DISTINCT continent) FROM countries"}]""".strip()
+[{"sql": "SELECT count(*) FROM Authors"}, {"sql": "SELECT other_details FROM Authors WHERE author_name  =  'Addison Denesik'"]""".strip()
 
 class DeepSeekChatLLM:
     """Wrapper around the DeepSeek ChatCompletions endpoint."""

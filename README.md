@@ -1,6 +1,9 @@
-# Uncertainty Text2SQL
+# VeriSQL: Uncertainty-Aware Text2SQL Verification and Reranking
 
-Simple Text-to-SQL pipeline that reads the Spider dataset, builds schema-aware prompts, and sends questions to the DeepSeek Chat model. The script writes generated SQL candidates to JSON and records detailed logs for each run. Each request now asks the model to return multiple candidate SQL queries in a single JSON array response.
+VeriSQL is an uncertainty-aware Text-to-SQL system that extends a simple generation pipeline into a full verification, scoring, and reranking framework.
+It reads the Spider dataset (dev.json), builds schema-aware prompts, generates multiple candidate SQL queries using the **deepseek-chat** model, and then applies semantic similarity, consensus metrics, Gaussian Mixture Models (GMM), execution checks, and hybrid scoring to identify the most reliable SQL query.
+
+The system stores all generated candidates, computes detailed uncertainty scores (Softmax, GMM posterior, semantic entropy, execution agreement), and outputs both raw predictions and reranked results. Comprehensive logs are also captured for every run.
 
 ## Project layout
 - `main.py` – entry point; orchestrates loading data, building prompts, and writing outputs.
@@ -87,27 +90,15 @@ Logs will be written to `logs/run_<timestamp>.log`, with a single file capturing
 The zero-shot prompt used for generation is:
 
 ```
-Given the following database schema:
+Given this database schema:
 {schema}
 
 Question: {question}
 
-Generate exactly n different, correct SQL queries. Return ONLY a JSON array in this format:
-[{"sql": "full SQL query here"}, {"sql": "full SQL query here"}, ..., {"sql": "full SQL query here"}]
+Generate exactly {n} different, correct SQL queries that answer the question.
+Each query must use a different SQL approach. Return ONLY a JSON array with {n} objects.
 
-IMPORTANT RULES:
-1. Each query must use a distinct SQL approach (different tables, joins, subqueries, aggregation methods)
-2. Only use "AS" for table aliases when joining the same table or to avoid ambiguous column names
-   Example where AS IS ALLOWED: "SELECT T2.Year ,  T1.Official_Name FROM city AS T1 JOIN farm_competition AS T2 ON T1.City_ID  =  T2.Host_city_ID" or "SELECT avg(T1.product_price) FROM Products AS T1 JOIN Order_items AS T2 ON T1.product_id  =  T2.product_id"
-   Example where AS IS PROHIBITED: "SELECT avg(product_price) AS average_price FROM Products" or "SELECT count(*) AS count FROM club"
-3. Never add column aliases - use original column names from schema
-4. All queries must return the same logical result
-5. No explanations or additional text outside the JSON array
-
-Example of correct output for n=2:
-[{"sql": "SELECT count(*) FROM club"}, {"sql": "SELECT T1.gender_code ,  count(*) FROM Customers AS T1 JOIN Orders AS T2 ON T1.customer_id  =  T2.customer_id JOIN Order_items AS T3 ON T2.order_id  =  T3.order_id GROUP BY T1.gender_code"}]
-
-Return only the JSON array with exactly {n} objects.
+Format: [{"sql": "query1"}, {"sql": "query2"}, ...]
 ```
 
 ### Offline reranking
@@ -124,12 +115,12 @@ The reranker computes cosine similarity, consensus, softmax probabilities, GMM p
 Use `sql_extract.py` to extract all the required sql queries from the output predicted files and store only the sql queries in a separate folder. Later this file will be used for evaluation to report the results. There are 2 modes `simple` means take the first sql query from the candidate and second `sac` is to take the best sql from 3 different techniques softmax, GMM and hybrid.
 
 ```bash
-python sql_extract.py --input_path outputs/llm/predictions_deepseek_chat_100.json --output_dir extracted_sql_for_evaluation/ --mode simple
+python sql_extract.py --input_path outputs/llm/deepseek_chat_one_candidate_query.json --output_dir extracted_sql_for_evaluation/ --mode simple
 ```
 
 and for using the sac mode we have the following prompt
 ```bash
-python sql_extract.py --input_path outputs/llm/predictions_deepseek_chat_100.json --output_dir extracted_sql_for_evaluation/ --mode sac
+python sql_extract.py --input_path outputs/reranked/deepseek_chat_k=4_reranked.json --output_dir extracted_sql_for_evaluation/ --mode sac
 ```
 
 ## Evaluation
@@ -141,7 +132,34 @@ python install.py
 ```
 
 ```bash
-python evaluation.py --gold spider_data/dev_gold.sql --db spider_data/database --table spider_data/tables.json --pred extracted_sql_for_evaluation/predictions_deepseek_chat_100_simple.sql --etype all
+python evaluation.py --gold spider_data/dev_gold.sql --db spider_data/database --table spider_data/tables.json --pred extracted_sql_for_evaluation/deepseek_chat_k=4_reranked_sql_robust.sql --etype all
 ```
 
 The script will create a temporary `.sql` file, run `spider_data/evaluate.py`, and print the reported metrics.
+
+## Dataset Download
+
+To run this project, you need the **Spider 1.0** dataset, which provides the natural language questions, gold SQL queries, and database files used for evaluation.
+
+### 📦 Download Links
+
+* **Spider 1.0 Dataset (Google Drive):**
+  [https://drive.google.com/file/d/1403EGqzIDoHMdQF4c9Bkyl7dZLZ5Wt6J/view](https://drive.google.com/file/d/1403EGqzIDoHMdQF4c9Bkyl7dZLZ5Wt6J/view)
+
+* **Official Spider GitHub Repository:**
+  [https://github.com/taoyds/spider](https://github.com/taoyds/spider)
+
+### 🔧 How the Dataset Is Used
+
+* **`dev.json`** — evaluation questions used by your pipeline
+* **`tables.json`** — database schema definitions used in prompt construction
+* **`database/`** — actual SQLite databases used for execution accuracy
+
+Make sure you set your config properly:
+
+```json
+{
+  "dataset_path": "./spider_data/"
+}
+```
+

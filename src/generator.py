@@ -11,7 +11,7 @@ from tqdm import tqdm
 
 from src.llm.deepseek_client import DeepSeekChatLLM
 from src.prompts.zero_shot import build_multi_sql_prompt
-from src.utils.text import clean_sql_text, clean_json_array
+from src.utils.clean_text import clean_json_array
 
 # Load environment variables for API keys.
 load_dotenv()
@@ -54,9 +54,7 @@ class PredictionGenerator:
             if self.delay > 0:
                 time.sleep(self.delay)
 
-            # self.logger.info("Processing question %s: %s", record.get("q_id", idx), record["question"])
-            # self.logger.info("Schema for %s:\n%s", record["db_id"], record["schema"])
-            
+            # ---- Generate SQL using LLM ----
             prompt = build_multi_sql_prompt(
                 record["question"], record["schema"], self.num_query
             )
@@ -64,47 +62,26 @@ class PredictionGenerator:
 
             try:
                 sql_text = self.llm.generate_sql(prompt)
-            except Exception as exc:  # noqa: BLE001 - defensive around external calls
+            except Exception as exc:  # defensive around external calls
                 self.logger.exception("LLM generation failed: %s", exc)
                 sql_text = ""
             self.logger.info("Raw LLM response: %s", sql_text)
 
             # ---- Extract structured candidates safely ----
-            parsed_candidates = clean_json_array(sql_text)
+            try:
+                parsed_candidates = clean_json_array(sql_text)
+                self.logger.info("Parsed candidates: %s", parsed_candidates)
+            except Exception as e:
+                self.logger.error("JSON parsing failed: %s", str(e))
+                parsed_candidates = []
 
-            # ---- Normalize each candidate to ensure `{"sql": "<query>"}` format ----
-            candidates = []
-            for item in parsed_candidates[: self.num_query]:
-                if isinstance(item, dict) and "sql" in item:
-                    sql_value = clean_sql_text(item["sql"])
-                else:
-                    sql_value = clean_sql_text(str(item))
-
-                if sql_value:
-                    candidates.append(Candidate(sql=sql_value))
-
-            if not candidates:
-                fallback_sql = clean_sql_text(sql_text or "SELECT 1;") or "SELECT 1;"
-                candidates.append(Candidate(sql=fallback_sql))
-
-            # Ensure we always have `num_query` candidates to keep the output structure stable
-            while len(candidates) < self.num_query:
-                candidates.append(Candidate(sql=candidates[-1].sql))
-
-            all_sql = [candidate.sql for candidate in candidates]
-            self.logger.info("All candidates for question %s: %s", record.get("q_id", idx), all_sql)
-
+            # ---- Build output entry ----
             generated_entries.append(
                 {
                     "id": idx,
                     "question": record["question"],
                     "db_id": record["db_id"],
-                    "candidates": [
-                        {
-                            "sql": candidate.sql
-                        }
-                        for candidate in candidates
-                    ],
+                    "candidates": parsed_candidates,
                 }
             )
 

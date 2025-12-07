@@ -1,4 +1,6 @@
-"""Robust Semantic SQL Reranking - Execution + gte-large + Optimized GMM + Hybrid"""
+"""
+Robust Semantic SQL Reranking - Softmax + Execution + gte-large + 2D GMM + Hybrid
+"""
 
 import argparse
 import json
@@ -18,233 +20,147 @@ import torch
 # Hyperparameters
 # -----------------------------
 TEMPERATURE = 8.0
-MIN_EXECUTION_TRUST = 0.2  # >= 20% agreement trust execution
+MIN_EXECUTION_TRUST = 0.3   # >= 30% agreement to trust execution
 
-# Semantic feature mixing for GMM
-W_QSS = 0.3   # weight for Question-SQL similarity
-W_CSA = 0.7   # weight for cross-sample agreement
+W_QSS = 0.6
+W_CSA = 0.4
 
-# Hybrid fusion weights (H1: softmax + GMM + execution)
-HYBRID_ALPHA = 0.2  # weight for semantic softmax probability
-HYBRID_BETA = 0.3   # weight for GMM-weighted semantic probability
-HYBRID_GAMMA = 0.5  # weight for execution agreement
+HYBRID_SOFT = 0.2
+HYBRID_GMM = 0.3
+HYBRID_EXEC = 0.5
 
 
 # -----------------------------
-# Utility Functions
+# Utilities
 # -----------------------------
 def cosine_similarity(a: np.ndarray, b: np.ndarray) -> float:
-    """Cosine similarity between two vectors with safety for zero-norm vectors."""
-    a_norm = np.linalg.norm(a)
-    b_norm = np.linalg.norm(b)
-    if a_norm == 0.0 or b_norm == 0.0:
-        return 0.0
+    a_norm = np.linalg.norm(a); b_norm = np.linalg.norm(b)
+    if a_norm == 0 or b_norm == 0: return 0.0
     return float(np.dot(a, b) / (a_norm * b_norm))
 
 
 def entropy(probs: Sequence[float]) -> float:
-    """
-    Standard Shannon entropy over a probability distribution.
-
-    We clip probabilities for numerical stability (avoid log(0)).
-    """
-    probs_array = np.asarray(probs, dtype=np.float64)
-    clipped = np.clip(probs_array, 1e-12, 1.0)
-    return float(-np.sum(clipped * np.log(clipped)))
+    probs = np.clip(probs, 1e-12, 1)
+    return float(-np.sum(probs * np.log(probs)))
 
 
-def execute_semantic_key(sql: str, db_id: str, db_root: str = "spider/database") -> tuple:
-    """
-    Execute SQL against a Spider-style SQLite DB and return a hashable "semantic key".
-
-    - On success: returns a frozenset of result rows (tuples) so that
-      semantically identical results collapse into the same cluster.
-    - On error: returns the string "ERROR".
-    """
+def execute_semantic_key(sql: str, db_id: str, db_root="spider/database") -> tuple:
     try:
-        db_path = f"{db_root}/{db_id}/{db_id}.sqlite"
-        conn = sqlite3.connect(db_path)
-        conn.execute("PRAGMA foreign_keys = ON;")
-        cursor = conn.cursor()
-        cursor.execute(sql)
-        results = cursor.fetchall()
+        db = f"{db_root}/{db_id}/{db_id}.sqlite"
+        conn = sqlite3.connect(db)
+        cur = conn.cursor()
+        cur.execute(sql)
+        rows = cur.fetchall()
         conn.close()
-        # Make hashable frozenset of tuples
-        return frozenset(tuple(row) for row in results)
-    except Exception:
+        return frozenset(tuple(r) for r in rows)
+    except:
         return "ERROR"
 
 
 def normalize_sql_for_embedding(sql: str) -> str:
-    """
-    Light SQL normalization to get more stable sentence embeddings.
-
-    - Trims trailing semicolons
-    - Normalizes whitespace
-    - Normalizes double quotes to single quotes
-    """
     sql = sql.strip().rstrip(";")
-    sql = " ".join(sql.split())  # normalize whitespace
-    sql = sql.replace('"', "'")  # normalize quotes
-    return sql
+    sql = " ".join(sql.split())
+    return sql.replace('"', "'")
 
 
 # -----------------------------
-# Optimized GMM on semantic feature
+# New 2D Optimized GMM
 # -----------------------------
-def optimized_gmm_scores(combined_feature: np.ndarray) -> np.ndarray:
+def optimized_gmm_scores_2d(qss_arr: np.ndarray, csa_arr: np.ndarray) -> np.ndarray:
     """
-    Fit a regularized 2-component GMM on a 1D combined semantic feature vector z,
-    and return the posterior probability of belonging to the "good" component.
-
-    The assumption is that z is approximately bimodal:
-    - one mode for semantically "good" SQL candidates
-    - one mode for semantically "bad" candidates
+    GMM over 2D semantic feature vector [QSS, CSA].
+    Returns: posterior probability of belonging to the "good" semantic cluster.
     """
-    if combined_feature.shape[0] == 1:
-        # Only one candidate no mixture full confidence
-        return np.ones_like(combined_feature, dtype=np.float32)
-    
-    # Normalize the feature
-    std = np.std(combined_feature)
-    if std < 1e-6:
-        # Degenerate case: no identifiable clusters
-        # Return neutral confidence
-        return np.ones_like(combined_feature, dtype=np.float32) * 0.5
-    
-    # Normalize to spread distribution before fitting GMM
-    z = (combined_feature - combined_feature.mean()) / (combined_feature.std() + 1e-6)
-    z = z.reshape(-1, 1)
-    
-    # Determine the number of distinct values
-    unique_vals = np.unique(np.round(z, decimals=6))
+    K = len(qss_arr)
+    if K == 1:
+        return np.ones(1, dtype=np.float32)
 
+    X = np.stack([qss_arr, csa_arr], axis=1).astype(np.float32)
+
+    # Degenerate constant cases
+    if np.std(X) < 1e-6:
+        return np.ones(K, dtype=np.float32) * 0.5
+
+    unique_vals = np.unique(np.round(X, 6), axis=0)
     if len(unique_vals) < 2:
-        # Only 1 distinct cluster cannot fit 2 GMM components
-        return np.ones_like(combined_feature, dtype=np.float32) * 0.5
+        return np.ones(K, dtype=np.float32) * 0.5
 
     gmm = GaussianMixture(
         n_components=2,
-        covariance_type="diag",
+        covariance_type="full",
         reg_covar=1e-3,
-        random_state=42,
+        random_state=42
     )
-    gmm.fit(z)
+    gmm.fit(X)
 
-    # The component with higher mean is treated as the "good" semantic region
-    means = gmm.means_.flatten()
+    means = gmm.means_[:, 0] + gmm.means_[:, 1]   # heuristic: higher QSS+CSA = better
     good_idx = int(np.argmax(means))
 
-    posteriors = gmm.predict_proba(z)[:, good_idx]
-    return posteriors.astype(np.float32)
+    post = gmm.predict_proba(X)[:, good_idx]
+    return post.astype(np.float32)
 
 
 # -----------------------------
-# Semantic reranking for one question (no execution info here)
+# Semantic reranking (2D GMM)
 # -----------------------------
-def semantic_rerank(
-    question_text: str,
-    sql_texts: List[str],
-    model: SentenceTransformer,
-) -> Dict:
-    """
-    Compute semantic scores for candidates using:
-      - QSS: question-SQL similarity (cosine)
-      - CSA: pairwise cross-sample agreement (mean embedding similarity)
-      - Combined feature z = W_QSS * QSS + W_CSA * CSA
-      - Baseline softmax over z
-      - GMM over z (optimized), then softmax on GMM-weighted logits
+def semantic_rerank(question: str, sql_list: List[str], model: SentenceTransformer) -> Dict:
 
-    Returns dict with:
-      - selected_sql_softmax, selected_sql_gmm
-      - semantic_entropy_softmax, semantic_entropy_gmm, gmm_entropy
-      - per-candidate arrays: qss, csa, combined, softmax_probs,
-        gmm_weighted_probs, gmm_scores, indices.
-    """
-    K = len(sql_texts)
+    K = len(sql_list)
     if K == 0:
         return {
             "selected_sql_softmax": None,
             "selected_sql_gmm": None,
-            "semantic_entropy_softmax": 0.0,
-            "semantic_entropy_gmm": 0.0,
-            "gmm_entropy": 0.0,
-            "qss": [],
-            "csa": [],
-            "combined": [],
-            "softmax_probs": [],
-            "gmm_weighted_probs": [],
-            "gmm_scores": [],
-            "best_idx_softmax": None,
-            "best_idx_gmm": None,
+            "semantic_entropy_softmax": 0,
+            "semantic_entropy_gmm": 0,
+            "gmm_entropy": 0,
+            "qss": [], "csa": [], "combined": [],
+            "softmax_probs": [], "gmm_weighted_probs": [], "gmm_scores": [],
         }
 
-    # ----- Embeddings -----
-    q_emb = model.encode(
-        question_text,
-        normalize_embeddings=True,
-        convert_to_numpy=True,
-    )
-    sql_norm = [normalize_sql_for_embedding(sql) for sql in sql_texts]
-    sql_embs = model.encode(
-        sql_norm,
-        normalize_embeddings=True,
-        convert_to_numpy=True,
-    )
+    q_emb = model.encode(question, normalize_embeddings=True)
+    sql_norm = [normalize_sql_for_embedding(x) for x in sql_list]
+    sql_emb = model.encode(sql_norm, normalize_embeddings=True)
 
-    # ----- QSS: question-SQL similarity -----
-    qss = [cosine_similarity(q_emb, s_emb) for s_emb in sql_embs]
+    # --- 1) Question-SQL Similarity (QSS) ---
+    qss = np.array([cosine_similarity(q_emb, s) for s in sql_emb], dtype=np.float32)
 
-    # ----- CSA: pairwise cross-sample agreement -----
-    # Using dot product since embeddings are L2-normalized cosine similarity
-    sim_matrix = sql_embs @ sql_embs.T
-    np.fill_diagonal(sim_matrix, 0.0)
-    if K > 1:
-        csa = (sim_matrix.sum(axis=1) / (K - 1)).tolist()
-    else:
-        csa = [1.0]  # neutral if only one candidate
+    # --- 2) Cross-Semantic Agreement (CSA) ---
+    sim = sql_emb @ sql_emb.T
+    np.fill_diagonal(sim, 0)
+    csa = np.array([(sim[i].sum() / (K-1)) if K>1 else 1.0 for i in range(K)], dtype=np.float32)
 
-    # ----- Combined semantic feature z = W_QSS * QSS + W_CSA * CSA -----
-    combined = np.array(
-        [W_QSS * q + W_CSA * c for q, c in zip(qss, csa)],
-        dtype=np.float32,
-    )
+    # --- 3) Scalar combined feature used for logits ---
+    combined_scalar = W_QSS * qss + W_CSA * csa
 
-    # ----- Baseline semantic softmax (no GMM) over logits = combined * TEMPERATURE -----
-    baseline_logits = combined * TEMPERATURE
-    softmax_probs = scipy_softmax(baseline_logits)
-    best_idx_softmax = int(np.argmax(softmax_probs))
-    selected_sql_softmax = sql_texts[best_idx_softmax]
-    semantic_entropy_softmax = entropy(softmax_probs)
+    # --- 4) Baseline softmax ---
+    logits = combined_scalar * TEMPERATURE
+    softmax_probs = scipy_softmax(logits)
+    best_soft = int(np.argmax(softmax_probs))
 
-    # ----- Optimized GMM on combined feature -----
-    gmm_scores = optimized_gmm_scores(combined)  # posterior over "good" component
-    gmm_entropy_value = entropy(gmm_scores)
+    # --- 5) 2D GMM over raw [QSS, CSA] ---
+    gmm_scores = optimized_gmm_scores_2d(qss, csa)
+    gmm_entropy = entropy(gmm_scores)
 
-    # ----- GMM-weighted logits and softmax -----
-    gmm_weighted_logits = combined * gmm_scores
-    gmm_weighted_logits_scaled = gmm_weighted_logits * TEMPERATURE
-    gmm_weighted_probs = scipy_softmax(gmm_weighted_logits_scaled)
-    best_idx_gmm = int(np.argmax(gmm_weighted_probs))
-    selected_sql_gmm = sql_texts[best_idx_gmm]
-    semantic_entropy_gmm = entropy(gmm_weighted_probs)
+    # --- 6) GMM-weighted logits ---
+    gmm_logits = (combined_scalar * gmm_scores) * TEMPERATURE
+    gmm_probs = scipy_softmax(gmm_logits)
+    best_gmm = int(np.argmax(gmm_probs))
 
     return {
-        "selected_sql_softmax": selected_sql_softmax,
-        "selected_sql_gmm": selected_sql_gmm,
-        "semantic_entropy_softmax": float(semantic_entropy_softmax),
-        "semantic_entropy_gmm": float(semantic_entropy_gmm),
-        "gmm_entropy": float(gmm_entropy_value),
-        "qss": [float(x) for x in qss],
-        "csa": [float(x) for x in csa],
-        "combined": [float(x) for x in combined],
-        "softmax_probs": [float(x) for x in softmax_probs],
-        "gmm_weighted_probs": [float(x) for x in gmm_weighted_probs],
-        "gmm_scores": [float(x) for x in gmm_scores],
-        "best_idx_softmax": best_idx_softmax,
-        "best_idx_gmm": best_idx_gmm,
+        "selected_sql_softmax": sql_list[best_soft],
+        "selected_sql_gmm": sql_list[best_gmm],
+        "semantic_entropy_softmax": float(entropy(softmax_probs)),
+        "semantic_entropy_gmm": float(entropy(gmm_probs)),
+        "gmm_entropy": float(gmm_entropy),
+        "qss": qss.tolist(),
+        "csa": csa.tolist(),
+        "combined": combined_scalar.tolist(),
+        "softmax_probs": softmax_probs.tolist(),
+        "gmm_weighted_probs": gmm_probs.tolist(),
+        "gmm_scores": gmm_scores.tolist(),
+        "best_idx_softmax": best_soft,
+        "best_idx_gmm": best_gmm,
     }
-
 
 # -----------------------------
 # Full reranking for one entry (execution + semantic + hybrid)
@@ -367,9 +283,9 @@ def rerank_question(
     # Then we apply a softmax over H for a proper probability distribution.
     hybrid_raw = np.array(
         [
-            HYBRID_ALPHA * p_soft
-            + HYBRID_BETA * p_gmm
-            + HYBRID_GAMMA * w_exec
+            HYBRID_SOFT * p_soft
+            + HYBRID_GMM * p_gmm
+            + HYBRID_EXEC * w_exec
             for p_soft, p_gmm, w_exec in zip(
                 softmax_probs, gmm_weighted_probs, exec_weights
             )
@@ -492,7 +408,7 @@ def run_reranking(
         input_payload = json.load(f)
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    logger.info(f"Loading gte-large model on {device}")
+    logger.info(f"Loading thenlper/gte-large model on {device}")
     model = SentenceTransformer("thenlper/gte-large", device=device)
 
     generated_entries = input_payload.get("generated", [])
