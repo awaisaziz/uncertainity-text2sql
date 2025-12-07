@@ -1,5 +1,4 @@
 """SQL generation pipeline using the DeepSeek chat model."""
-from __future__ import annotations
 
 import json
 from dataclasses import dataclass
@@ -63,23 +62,15 @@ class PredictionGenerator:
             )
             self.logger.info("Generating SQL using user prompt: %s", prompt)
 
-            sql_text = self.llm.generate_sql(prompt)
+            try:
+                sql_text = self.llm.generate_sql(prompt)
+            except Exception as exc:  # noqa: BLE001 - defensive around external calls
+                self.logger.exception("LLM generation failed: %s", exc)
+                sql_text = ""
             self.logger.info("Raw LLM response: %s", sql_text)
 
             # ---- Extract structured candidates safely ----
             parsed_candidates = clean_json_array(sql_text)
-
-            # Fallback if clean_json_array failed
-            if parsed_candidates is None:
-                parsed_candidates = [{"sql": clean_sql_text(sql_text)}]
-
-            # If the model returned a single dict, wrap it
-            elif isinstance(parsed_candidates, dict):
-                parsed_candidates = [parsed_candidates]
-
-            # If the model returned something else unexpected
-            elif not isinstance(parsed_candidates, list):
-                parsed_candidates = [parsed_candidates]
 
             # ---- Normalize each candidate to ensure `{"sql": "<query>"}` format ----
             candidates = []
@@ -88,7 +79,17 @@ class PredictionGenerator:
                     sql_value = clean_sql_text(item["sql"])
                 else:
                     sql_value = clean_sql_text(str(item))
-                candidates.append(Candidate(sql=sql_value))
+
+                if sql_value:
+                    candidates.append(Candidate(sql=sql_value))
+
+            if not candidates:
+                fallback_sql = clean_sql_text(sql_text or "SELECT 1;") or "SELECT 1;"
+                candidates.append(Candidate(sql=fallback_sql))
+
+            # Ensure we always have `num_query` candidates to keep the output structure stable
+            while len(candidates) < self.num_query:
+                candidates.append(Candidate(sql=candidates[-1].sql))
 
             all_sql = [candidate.sql for candidate in candidates]
             self.logger.info("All candidates for question %s: %s", record.get("q_id", idx), all_sql)

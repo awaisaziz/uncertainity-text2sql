@@ -3,10 +3,11 @@
   "default_provider": "deepseek",
   "default_model": "deepseek-chat",
   "num_sample": 1,
-  "num_query": 1,
-  "max_tokens": 2048,
+  "num_query": 7,
+  "max_tokens": 7000,
   "request_delay": 0.0,
   "mode": "rerank",
-  "output_llm": "outputs/llm/deepseek_chat_four_candidate_query.json",
-  "output_rerank": "outputs/reranked/deepseek_chat_four_candidate_query_reranked.json"
+  "db_root": "spider_data/database",
+  "output_llm": "outputs/llm/deepseek_chat_k=7.json",
+  "output_rerank": "outputs/reranked/deepseek_chat_k=7_reranked.json"
 }

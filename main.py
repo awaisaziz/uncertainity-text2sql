@@ -25,6 +25,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--request_delay", type=float, default=None)
     parser.add_argument("--output_llm", default=None)
     parser.add_argument("--output_rerank", default=None)
+    parser.add_argument("--db_root", default="spider_data/database")
     parser.add_argument("--config", default="config/config.json", help="Path to config JSON file.")
     return parser.parse_args()
 
@@ -45,6 +46,7 @@ def main() -> None:
         or config.get("output_rerank")
         or f"outputs/reranked/{output_llm.stem}_reranked.json"
     )
+    db_root = args.db_root or config.get("db_root", "spider_data/database")
 
     log_dir = Path("logs")
     log_name = f"run_{datetime.utcnow().strftime('%Y%m%dT%H%M%SZ')}.log"
@@ -78,7 +80,7 @@ def main() -> None:
 
         logger.info("Finished pipeline. Predictions stored at %s", output_llm)
     else:
-        run_reranking(input_path=output_llm, output_path=output_rerank, logger=logger)
+        run_reranking(input_path=output_llm, output_path=output_rerank, db_root=db_root, logger=logger)
         logger.info("Finished reranking. Output stored at %s", output_rerank)
 
     logger.info("Log file available at %s/%s", log_dir, log_name)

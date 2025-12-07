@@ -1,0 +1,2211 @@
+{
+  "dataset_path": "spider_data",
+  "default_provider": "deepseek",
+  "default_model": "deepseek-chat",
+  "mode": "generate",
+  "num_sample": 100,
+  "num_query": 5,
+  "max_tokens": 6000,
+  "generated": [
+    {
+      "id": 0,
+      "question": "How many singers do we have?",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT COUNT(*) FROM singer;"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM singer;"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM singer;"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM singer;"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM singer;"
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "question": "What is the total number of singers?",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT COUNT(*) FROM singer;"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM singer;"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM singer;"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM singer;"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM singer;"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "Show name, country, age for all singers ordered by age from the oldest to the youngest.",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT Name, Country, Age FROM singer ORDER BY Age DESC;"
+        },
+        {
+          "sql": "SELECT Name, Country, Age FROM singer ORDER BY Age DESC;"
+        },
+        {
+          "sql": "SELECT Name, Country, Age FROM singer ORDER BY Age DESC;"
+        },
+        {
+          "sql": "SELECT Name, Country, Age FROM singer ORDER BY Age DESC;"
+        },
+        {
+          "sql": "SELECT Name, Country, Age FROM singer ORDER BY Age DESC;"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "What are the names, countries, and ages for every singer in descending order of age?",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT Name, Country, Age FROM singer ORDER BY Age DESC;"
+        },
+        {
+          "sql": "SELECT Name, Country, Age FROM singer ORDER BY Age DESC;"
+        },
+        {
+          "sql": "SELECT Name, Country, Age FROM singer ORDER BY Age DESC;"
+        },
+        {
+          "sql": "SELECT Name, Country, Age FROM singer ORDER BY Age DESC;"
+        },
+        {
+          "sql": "SELECT Name, Country, Age FROM singer ORDER BY Age DESC;"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "What is the average, minimum, and maximum age of all singers from France?",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT AVG(Age) AS Average, MIN(Age) AS Minimum, MAX(Age) AS Maximum FROM singer WHERE Country = 'France';"
+        },
+        {
+          "sql": "SELECT AVG(Age) AS Average, MIN(Age) AS Minimum, MAX(Age) AS Maximum FROM singer WHERE Country = 'France';"
+        },
+        {
+          "sql": "SELECT AVG(Age) AS Average, MIN(Age) AS Minimum, MAX(Age) AS Maximum FROM singer WHERE Country = 'France';"
+        },
+        {
+          "sql": "SELECT AVG(Age) AS Average, MIN(Age) AS Minimum, MAX(Age) AS Maximum FROM singer WHERE Country = 'France';"
+        },
+        {
+          "sql": "SELECT AVG(Age) AS Average, MIN(Age) AS Minimum, MAX(Age) AS Maximum FROM singer WHERE Country = 'France';"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "What is the average, minimum, and maximum age for all French singers?",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT AVG(Age) AS Average, MIN(Age) AS Minimum, MAX(Age) AS Maximum FROM singer WHERE Country = 'French';"
+        },
+        {
+          "sql": "SELECT AVG(Age) AS Average, MIN(Age) AS Minimum, MAX(Age) AS Maximum FROM singer WHERE Country = 'French';"
+        },
+        {
+          "sql": "SELECT AVG(Age) AS Average, MIN(Age) AS Minimum, MAX(Age) AS Maximum FROM singer WHERE Country = 'French';"
+        },
+        {
+          "sql": "SELECT AVG(Age) AS Average, MIN(Age) AS Minimum, MAX(Age) AS Maximum FROM singer WHERE Country = 'French';"
+        },
+        {
+          "sql": "SELECT AVG(Age) AS Average, MIN(Age) AS Minimum, MAX(Age) AS Maximum FROM singer WHERE Country = 'French';"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "Show the name and the release year of the song by the youngest singer.",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT singer.Song_Name, singer.Song_release_year FROM singer WHERE singer.Age = (SELECT MIN(singer.Age) FROM singer);"
+        },
+        {
+          "sql": "SELECT singer.Song_Name, singer.Song_release_year FROM singer ORDER BY singer.Age ASC LIMIT 1;"
+        },
+        {
+          "sql": "SELECT singer.Song_Name, singer.Song_release_year FROM singer ORDER BY singer.Age ASC LIMIT 1;"
+        },
+        {
+          "sql": "SELECT singer.Song_Name, singer.Song_release_year FROM singer WHERE singer.Age = (SELECT MIN(singer.Age) FROM singer)"
+        },
+        {
+          "sql": "SELECT singer.Song_Name, singer.Song_release_year FROM singer ORDER BY singer.Age ASC LIMIT 1;"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "What are the names and release years for all the songs of the youngest singer?",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT Song_Name, Song_release_year FROM singer WHERE Age = (SELECT MIN(Age) FROM singer) ORDER BY Song_Name;"
+        },
+        {
+          "sql": "SELECT Song_Name, Song_release_year FROM singer WHERE Age = (SELECT MIN(Age) FROM singer) ORDER BY Song_Name;"
+        },
+        {
+          "sql": "SELECT Song_Name, Song_release_year FROM singer WHERE Age = (SELECT MIN(Age) FROM singer) ORDER BY Song_Name;"
+        },
+        {
+          "sql": "SELECT Song_Name, Song_release_year FROM singer WHERE Age = (SELECT MIN(Age) FROM singer) ORDER BY Song_Name;"
+        },
+        {
+          "sql": "SELECT Song_Name, Song_release_year FROM singer WHERE Age = (SELECT MIN(Age) FROM singer) ORDER BY Song_Name;"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "question": "What are all distinct countries where singers above age 20 are from?",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT DISTINCT Country FROM singer WHERE Age > 20;"
+        },
+        {
+          "sql": "SELECT DISTINCT Country FROM singer WHERE Age > 20;"
+        },
+        {
+          "sql": "SELECT DISTINCT Country FROM singer WHERE Age > 20;"
+        },
+        {
+          "sql": "SELECT DISTINCT Country FROM singer WHERE Age > 20;"
+        },
+        {
+          "sql": "SELECT DISTINCT Country FROM singer WHERE Age > 20;"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "question": "What are  the different countries with singers above age 20?",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT DISTINCT Country FROM singer WHERE Age > 20;"
+        },
+        {
+          "sql": "SELECT DISTINCT Country FROM singer WHERE Age > 20;"
+        },
+        {
+          "sql": "SELECT DISTINCT Country FROM singer WHERE Age > 20;"
+        },
+        {
+          "sql": "SELECT DISTINCT Country FROM singer WHERE Age > 20;"
+        },
+        {
+          "sql": "SELECT DISTINCT Country FROM singer WHERE Age > 20;"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "question": "Show all countries and the number of singers in each country.",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT Country, COUNT(*) AS NumberOfSingers FROM singer GROUP BY Country;"
+        },
+        {
+          "sql": "SELECT Country, COUNT(*) AS number_of_singers FROM singer GROUP BY Country;"
+        },
+        {
+          "sql": "SELECT Country, COUNT(*) AS number_of_singers FROM singer GROUP BY Country;"
+        },
+        {
+          "sql": "SELECT Country, COUNT(*) AS number_of_singers FROM singer GROUP BY Country;"
+        },
+        {
+          "sql": "SELECT Country, COUNT(*) AS NumberOfSingers FROM singer GROUP BY Country;"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "question": "How many singers are from each country?",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT Country, COUNT(*) FROM singer GROUP BY Country;"
+        },
+        {
+          "sql": "SELECT Country, COUNT(*) FROM singer GROUP BY Country;"
+        },
+        {
+          "sql": "SELECT Country, COUNT(*) FROM singer GROUP BY Country;"
+        },
+        {
+          "sql": "SELECT Country, COUNT(*) FROM singer GROUP BY Country;"
+        },
+        {
+          "sql": "SELECT Country, COUNT(*) FROM singer GROUP BY Country;"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "question": "List all song names by singers above the average age.",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT DISTINCT singer.Song_Name FROM singer WHERE singer.Age > (SELECT AVG(singer.Age) FROM singer);"
+        },
+        {
+          "sql": "SELECT DISTINCT singer.Song_Name FROM singer WHERE singer.Age > (SELECT AVG(Age) FROM singer);"
+        },
+        {
+          "sql": "SELECT DISTINCT singer.Song_Name FROM singer WHERE singer.Age > (SELECT AVG(singer.Age) FROM singer) ORDER BY singer.Song_Name;"
+        },
+        {
+          "sql": "SELECT DISTINCT singer.Song_Name FROM singer WHERE singer.Age > (SELECT AVG(singer.Age) FROM singer);"
+        },
+        {
+          "sql": "SELECT DISTINCT singer.Song_Name FROM singer WHERE singer.Age > (SELECT AVG(Age) FROM singer) ORDER BY singer.Song_Name;"
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "question": "What are all the song names by singers who are older than average?",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT DISTINCT singer.Song_Name FROM singer WHERE singer.Age > (SELECT AVG(Age) FROM singer) ORDER BY singer.Song_Name;"
+        },
+        {
+          "sql": "SELECT DISTINCT singer.Song_Name FROM singer WHERE singer.Age > (SELECT AVG(singer.Age) FROM singer) ORDER BY singer.Song_Name;"
+        },
+        {
+          "sql": "SELECT DISTINCT singer.Song_Name FROM singer WHERE singer.Age > (SELECT AVG(Age) FROM singer) ORDER BY singer.Song_Name;"
+        },
+        {
+          "sql": "SELECT DISTINCT singer.Song_Name FROM singer WHERE singer.Age > (SELECT AVG(Age) FROM singer)"
+        },
+        {
+          "sql": "SELECT DISTINCT singer.Song_Name FROM singer WHERE singer.Age > (SELECT AVG(Age) FROM singer) ORDER BY singer.Song_Name;"
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "question": "Show location and name for all stadiums with a capacity between 5000 and 10000.",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT Location, Name FROM stadium WHERE Capacity BETWEEN 5000 AND 10000;"
+        },
+        {
+          "sql": "SELECT Location, Name FROM stadium WHERE Capacity BETWEEN 5000 AND 10000;"
+        },
+        {
+          "sql": "SELECT Location, Name FROM stadium WHERE Capacity BETWEEN 5000 AND 10000;"
+        },
+        {
+          "sql": "SELECT Location, Name FROM stadium WHERE Capacity BETWEEN 5000 AND 10000;"
+        },
+        {
+          "sql": "SELECT Location, Name FROM stadium WHERE Capacity BETWEEN 5000 AND 10000;"
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "question": "What are the locations and names of all stations with capacity between 5000 and 10000?",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT Location, Name FROM stadium WHERE Capacity BETWEEN 5000 AND 10000;"
+        },
+        {
+          "sql": "SELECT Location, Name FROM stadium WHERE Capacity BETWEEN 5000 AND 10000;"
+        },
+        {
+          "sql": "SELECT Location, Name FROM stadium WHERE Capacity BETWEEN 5000 AND 10000;"
+        },
+        {
+          "sql": "SELECT Location, Name FROM stadium WHERE Capacity BETWEEN 5000 AND 10000;"
+        },
+        {
+          "sql": "SELECT Location, Name FROM stadium WHERE Capacity BETWEEN 5000 AND 10000;"
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "question": "What is the maximum capacity and the average of all stadiums ?",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT MAX(Capacity), AVG(Capacity) FROM stadium;"
+        },
+        {
+          "sql": "SELECT MAX(Capacity), AVG(Capacity) FROM stadium;"
+        },
+        {
+          "sql": "SELECT MAX(Capacity), AVG(Capacity) FROM stadium;"
+        },
+        {
+          "sql": "SELECT MAX(Capacity), AVG(Capacity) FROM stadium;"
+        },
+        {
+          "sql": "SELECT MAX(Capacity), AVG(Capacity) FROM stadium;"
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "question": "What is the average and maximum capacities for all stadiums ?",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT AVG(Capacity) AS Average, MAX(Capacity) AS Maximum FROM stadium;"
+        },
+        {
+          "sql": "SELECT AVG(Capacity) AS Average, MAX(Capacity) AS Maximum FROM stadium;"
+        },
+        {
+          "sql": "SELECT AVG(Capacity) AS Average_Capacity, MAX(Capacity) AS Maximum_Capacity FROM stadium;"
+        },
+        {
+          "sql": "SELECT AVG(Capacity) AS Average, MAX(Capacity) AS Maximum FROM stadium;"
+        },
+        {
+          "sql": "SELECT AVG(Capacity) AS Average, MAX(Capacity) AS Maximum FROM stadium;"
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "question": "What is the name and capacity for the stadium with highest average attendance?",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT Name, Capacity FROM stadium ORDER BY Average DESC LIMIT 1;"
+        },
+        {
+          "sql": "SELECT Name, Capacity FROM stadium ORDER BY Average DESC LIMIT 1;"
+        },
+        {
+          "sql": "SELECT Name, Capacity FROM stadium ORDER BY Average DESC LIMIT 1;"
+        },
+        {
+          "sql": "SELECT Name, Capacity FROM stadium ORDER BY Average DESC LIMIT 1;"
+        },
+        {
+          "sql": "SELECT Name, Capacity FROM stadium ORDER BY Average DESC LIMIT 1;"
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "question": "What is the name and capacity for the stadium with the highest average attendance?",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT Name, Capacity FROM stadium ORDER BY Average DESC LIMIT 1;"
+        },
+        {
+          "sql": "SELECT Name, Capacity FROM stadium ORDER BY Average DESC LIMIT 1;"
+        },
+        {
+          "sql": "SELECT Name, Capacity FROM stadium ORDER BY Average DESC LIMIT 1;"
+        },
+        {
+          "sql": "SELECT Name, Capacity FROM stadium ORDER BY Average DESC LIMIT 1;"
+        },
+        {
+          "sql": "SELECT Name, Capacity FROM stadium ORDER BY Average DESC LIMIT 1;"
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "question": "How many concerts are there in year 2014 or 2015?",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT COUNT(*) FROM concert WHERE Year IN (2014, 2015);"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM concert WHERE Year = 2014 OR Year = 2015;"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM concert WHERE Year = 2014 OR Year = 2015;"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM concert WHERE Year = 2014 OR Year = 2015;"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM concert WHERE Year = 2014 OR Year = 2015;"
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "question": "How many concerts occurred in 2014 or 2015?",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT COUNT(*) FROM concert WHERE Year = 2014 OR Year = 2015;"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM concert WHERE Year IN (2014, 2015);"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM concert WHERE Year = 2014 OR Year = 2015;"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM concert WHERE Year = 2014 OR Year = 2015;"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM concert WHERE Year = 2014 OR Year = 2015;"
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "question": "Show the stadium name and the number of concerts in each stadium.",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT stadium.Name, COUNT(concert.concert_ID) FROM stadium LEFT JOIN concert ON stadium.Stadium_ID = concert.Stadium_ID GROUP BY stadium.Stadium_ID, stadium.Name;"
+        },
+        {
+          "sql": "SELECT stadium.Name, COUNT(concert.concert_ID) FROM stadium LEFT JOIN concert ON stadium.Stadium_ID = concert.Stadium_ID GROUP BY stadium.Stadium_ID, stadium.Name;"
+        },
+        {
+          "sql": "SELECT stadium.Name, COUNT(concert.concert_ID) FROM stadium LEFT JOIN concert ON stadium.Stadium_ID = concert.Stadium_ID GROUP BY stadium.Stadium_ID, stadium.Name;"
+        },
+        {
+          "sql": "SELECT stadium.Name, COUNT(concert.concert_ID) FROM stadium LEFT JOIN concert ON stadium.Stadium_ID = concert.Stadium_ID GROUP BY stadium.Stadium_ID, stadium.Name;"
+        },
+        {
+          "sql": "SELECT stadium.Name, COUNT(concert.concert_ID) FROM stadium LEFT JOIN concert ON stadium.Stadium_ID = concert.Stadium_ID GROUP BY stadium.Stadium_ID, stadium.Name;"
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "question": "For each stadium, how many concerts play there?",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT Stadium_ID, COUNT(*) FROM concert GROUP BY Stadium_ID;"
+        },
+        {
+          "sql": "SELECT Stadium_ID, COUNT(*) FROM concert GROUP BY Stadium_ID;"
+        },
+        {
+          "sql": "SELECT Stadium_ID, COUNT(*) FROM concert GROUP BY Stadium_ID;"
+        },
+        {
+          "sql": "SELECT Stadium_ID, COUNT(*) FROM concert GROUP BY Stadium_ID;"
+        },
+        {
+          "sql": "SELECT Stadium_ID, COUNT(*) FROM concert GROUP BY Stadium_ID;"
+        }
+      ]
+    },
+    {
+      "id": 24,
+      "question": "Show the stadium name and capacity with most number of concerts in year 2014 or after.",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT stadium.Name, stadium.Capacity FROM stadium JOIN concert ON stadium.Stadium_ID = concert.Stadium_ID WHERE concert.Year >= 2014 GROUP BY stadium.Stadium_ID, stadium.Name, stadium.Capacity ORDER BY COUNT(*) DESC LIMIT 1;"
+        },
+        {
+          "sql": "SELECT stadium.Name, stadium.Capacity FROM stadium JOIN concert ON stadium.Stadium_ID = concert.Stadium_ID WHERE concert.Year >= 2014 GROUP BY stadium.Stadium_ID, stadium.Name, stadium.Capacity ORDER BY COUNT(*) DESC LIMIT 1;"
+        },
+        {
+          "sql": "SELECT stadium.Name, stadium.Capacity FROM stadium JOIN concert ON stadium.Stadium_ID = concert.Stadium_ID WHERE concert.Year >= 2014 GROUP BY stadium.Stadium_ID, stadium.Name, stadium.Capacity ORDER BY COUNT(*) DESC LIMIT 1;"
+        },
+        {
+          "sql": "SELECT stadium.Name, stadium.Capacity FROM stadium JOIN concert ON stadium.Stadium_ID = concert.Stadium_ID WHERE concert.Year >= 2014 GROUP BY stadium.Stadium_ID, stadium.Name, stadium.Capacity ORDER BY COUNT(*) DESC LIMIT 1;"
+        },
+        {
+          "sql": "SELECT stadium.Name, stadium.Capacity FROM stadium JOIN concert ON stadium.Stadium_ID = concert.Stadium_ID WHERE concert.Year >= 2014 GROUP BY stadium.Stadium_ID, stadium.Name, stadium.Capacity ORDER BY COUNT(*) DESC LIMIT 1;"
+        }
+      ]
+    },
+    {
+      "id": 25,
+      "question": "What is the name and capacity of the stadium with the most concerts after 2013 ?",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT Name, Capacity FROM stadium WHERE Stadium_ID = ( SELECT Stadium_ID FROM concert WHERE Year > 2013 GROUP BY Stadium_ID ORDER BY COUNT(*) DESC LIMIT 1 );"
+        },
+        {
+          "sql": "SELECT Name, Capacity FROM stadium WHERE Stadium_ID = ( SELECT Stadium_ID FROM concert WHERE Year > 2013 GROUP BY Stadium_ID ORDER BY COUNT(*) DESC LIMIT 1 );"
+        },
+        {
+          "sql": "SELECT Name, Capacity FROM stadium WHERE Stadium_ID = ( SELECT Stadium_ID FROM concert WHERE Year > 2013 GROUP BY Stadium_ID ORDER BY COUNT(*) DESC LIMIT 1 );"
+        },
+        {
+          "sql": "SELECT Name, Capacity FROM stadium WHERE Stadium_ID = ( SELECT Stadium_ID FROM concert WHERE Year > 2013 GROUP BY Stadium_ID ORDER BY COUNT(*) DESC LIMIT 1 );"
+        },
+        {
+          "sql": "SELECT Name, Capacity FROM stadium WHERE Stadium_ID = ( SELECT Stadium_ID FROM concert WHERE Year > 2013 GROUP BY Stadium_ID ORDER BY COUNT(*) DESC LIMIT 1 );"
+        }
+      ]
+    },
+    {
+      "id": 26,
+      "question": "Which year has most number of concerts?",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT Year FROM concert GROUP BY Year ORDER BY COUNT(*) DESC LIMIT 1;"
+        },
+        {
+          "sql": "SELECT Year FROM concert GROUP BY Year ORDER BY COUNT(*) DESC LIMIT 1;"
+        },
+        {
+          "sql": "SELECT Year FROM concert GROUP BY Year ORDER BY COUNT(*) DESC LIMIT 1;"
+        },
+        {
+          "sql": "SELECT Year FROM concert GROUP BY Year ORDER BY COUNT(*) DESC LIMIT 1;"
+        },
+        {
+          "sql": "SELECT Year FROM concert GROUP BY Year ORDER BY COUNT(*) DESC LIMIT 1;"
+        }
+      ]
+    },
+    {
+      "id": 27,
+      "question": "What is the year that had the most concerts?",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT Year FROM concert GROUP BY Year ORDER BY COUNT(*) DESC LIMIT 1;"
+        },
+        {
+          "sql": "SELECT Year FROM concert GROUP BY Year ORDER BY COUNT(*) DESC LIMIT 1;"
+        },
+        {
+          "sql": "SELECT Year FROM concert GROUP BY Year ORDER BY COUNT(*) DESC LIMIT 1;"
+        },
+        {
+          "sql": "SELECT Year FROM concert GROUP BY Year ORDER BY COUNT(*) DESC LIMIT 1;"
+        },
+        {
+          "sql": "SELECT Year FROM concert GROUP BY Year ORDER BY COUNT(*) DESC LIMIT 1;"
+        }
+      ]
+    },
+    {
+      "id": 28,
+      "question": "Show the stadium names without any concert.",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT Name FROM stadium WHERE Stadium_ID NOT IN ( SELECT Stadium_ID FROM concert );"
+        },
+        {
+          "sql": "SELECT Name FROM stadium WHERE Stadium_ID NOT IN ( SELECT DISTINCT Stadium_ID FROM concert );"
+        },
+        {
+          "sql": "SELECT Name FROM stadium WHERE Stadium_ID NOT IN ( SELECT DISTINCT Stadium_ID FROM concert );"
+        },
+        {
+          "sql": "SELECT Name FROM stadium WHERE Stadium_ID NOT IN ( SELECT Stadium_ID FROM concert );"
+        },
+        {
+          "sql": "SELECT Name FROM stadium WHERE Stadium_ID NOT IN ( SELECT Stadium_ID FROM concert );"
+        }
+      ]
+    },
+    {
+      "id": 29,
+      "question": "What are the names of the stadiums without any concerts?",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT Name FROM stadium WHERE Stadium_ID NOT IN ( SELECT DISTINCT Stadium_ID FROM concert );"
+        },
+        {
+          "sql": "SELECT Name FROM stadium WHERE Stadium_ID NOT IN (SELECT Stadium_ID FROM concert);"
+        },
+        {
+          "sql": "SELECT Name FROM stadium WHERE Stadium_ID NOT IN (SELECT Stadium_ID FROM concert);"
+        },
+        {
+          "sql": "SELECT Name FROM stadium WHERE Stadium_ID NOT IN (SELECT Stadium_ID FROM concert);"
+        },
+        {
+          "sql": "SELECT Name FROM stadium WHERE Stadium_ID NOT IN ( SELECT DISTINCT Stadium_ID FROM concert );"
+        }
+      ]
+    },
+    {
+      "id": 30,
+      "question": "Show countries where a singer above age 40 and a singer below 30 are from.",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT DISTINCT Country FROM singer WHERE Age > 40 INTERSECT SELECT DISTINCT Country FROM singer WHERE Age < 30;"
+        },
+        {
+          "sql": "SELECT DISTINCT Country FROM singer WHERE Age > 40 OR Age < 30;"
+        },
+        {
+          "sql": "SELECT DISTINCT Country FROM singer WHERE Age > 40 OR Age < 30;"
+        },
+        {
+          "sql": "SELECT DISTINCT Country FROM singer WHERE Age > 40 OR Age < 30;"
+        },
+        {
+          "sql": "SELECT DISTINCT Country FROM singer WHERE Age > 40 OR Age < 30;"
+        }
+      ]
+    },
+    {
+      "id": 31,
+      "question": "Show names for all stadiums except for stadiums having a concert in year 2014.",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT Name FROM stadium WHERE Stadium_ID NOT IN ( SELECT Stadium_ID FROM concert WHERE Year = 2014 );"
+        },
+        {
+          "sql": "SELECT Name FROM stadium WHERE Stadium_ID NOT IN ( SELECT DISTINCT Stadium_ID FROM concert WHERE Year = 2014 );"
+        },
+        {
+          "sql": "SELECT Name FROM stadium WHERE Stadium_ID NOT IN ( SELECT Stadium_ID FROM concert WHERE Year = 2014 );"
+        },
+        {
+          "sql": "SELECT Name FROM stadium WHERE Stadium_ID NOT IN ( SELECT Stadium_ID FROM concert WHERE Year = 2014 );"
+        },
+        {
+          "sql": "SELECT Name FROM stadium WHERE Stadium_ID NOT IN ( SELECT Stadium_ID FROM concert WHERE Year = 2014 );"
+        }
+      ]
+    },
+    {
+      "id": 32,
+      "question": "What are the names of all stadiums that did not have a concert in 2014?",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT Name FROM stadium WHERE Stadium_ID NOT IN ( SELECT DISTINCT Stadium_ID FROM concert WHERE Year = 2014 );"
+        },
+        {
+          "sql": "SELECT Name FROM stadium WHERE Stadium_ID NOT IN ( SELECT DISTINCT Stadium_ID FROM concert WHERE Year = 2014 );"
+        },
+        {
+          "sql": "SELECT Name FROM stadium WHERE Stadium_ID NOT IN ( SELECT DISTINCT Stadium_ID FROM concert WHERE Year = 2014 );"
+        },
+        {
+          "sql": "SELECT Name FROM stadium WHERE Stadium_ID NOT IN ( SELECT DISTINCT Stadium_ID FROM concert WHERE Year = 2014 );"
+        },
+        {
+          "sql": "SELECT Name FROM stadium WHERE Stadium_ID NOT IN ( SELECT DISTINCT Stadium_ID FROM concert WHERE Year = 2014 );"
+        }
+      ]
+    },
+    {
+      "id": 33,
+      "question": "Show the name and theme for all concerts and the number of singers in each concert.",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT concert.concert_Name, concert.Theme, COUNT(singer_in_concert.Singer_ID) AS singer_count FROM concert LEFT JOIN singer_in_concert ON concert.concert_ID = singer_in_concert.concert_ID GROUP BY concert.concert_ID, concert.concert_Name, concert.Theme;"
+        },
+        {
+          "sql": "SELECT concert.concert_Name, concert.Theme, COUNT(singer_in_concert.Singer_ID) FROM concert LEFT JOIN singer_in_concert ON concert.concert_ID = singer_in_concert.concert_ID GROUP BY concert.concert_ID, concert.concert_Name, concert.Theme;"
+        },
+        {
+          "sql": "SELECT concert.concert_Name, concert.Theme, COUNT(singer_in_concert.Singer_ID) AS singer_count FROM concert LEFT JOIN singer_in_concert ON concert.concert_ID = singer_in_concert.concert_ID GROUP BY concert.concert_ID, concert.concert_Name, concert.Theme;"
+        },
+        {
+          "sql": "SELECT concert.concert_Name, concert.Theme, COUNT(singer_in_concert.Singer_ID) AS singer_count FROM concert LEFT JOIN singer_in_concert ON concert.concert_ID = singer_in_concert.concert_ID GROUP BY concert.concert_ID, concert.concert_Name, concert.Theme;"
+        },
+        {
+          "sql": "SELECT concert.concert_Name, concert.Theme, COUNT(singer_in_concert.Singer_ID) FROM concert LEFT JOIN singer_in_concert ON concert.concert_ID = singer_in_concert.concert_ID GROUP BY concert.concert_ID, concert.concert_Name, concert.Theme;"
+        }
+      ]
+    },
+    {
+      "id": 34,
+      "question": "What are the names , themes , and number of singers for every concert ?",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT concert.concert_Name, concert.Theme, COUNT(singer_in_concert.Singer_ID) FROM concert LEFT JOIN singer_in_concert ON concert.concert_ID = singer_in_concert.concert_ID GROUP BY concert.concert_ID, concert.concert_Name, concert.Theme;"
+        },
+        {
+          "sql": "SELECT concert.concert_Name, concert.Theme, COUNT(singer_in_concert.Singer_ID) AS number_of_singers FROM concert LEFT JOIN singer_in_concert ON concert.concert_ID = singer_in_concert.concert_ID GROUP BY concert.concert_ID, concert.concert_Name, concert.Theme;"
+        },
+        {
+          "sql": "SELECT concert.concert_Name, concert.Theme, COUNT(singer_in_concert.Singer_ID) AS number_of_singers FROM concert LEFT JOIN singer_in_concert ON concert.concert_ID = singer_in_concert.concert_ID GROUP BY concert.concert_ID, concert.concert_Name, concert.Theme;"
+        },
+        {
+          "sql": "SELECT concert.concert_Name, concert.Theme, COUNT(singer_in_concert.Singer_ID) AS number_of_singers FROM concert LEFT JOIN singer_in_concert ON concert.concert_ID = singer_in_concert.concert_ID GROUP BY concert.concert_ID, concert.concert_Name, concert.Theme;"
+        },
+        {
+          "sql": "SELECT concert.concert_Name, concert.Theme, COUNT(singer_in_concert.Singer_ID) FROM concert LEFT JOIN singer_in_concert ON concert.concert_ID = singer_in_concert.concert_ID GROUP BY concert.concert_ID, concert.concert_Name, concert.Theme;"
+        }
+      ]
+    },
+    {
+      "id": 35,
+      "question": "List singer names and number of concerts for each singer.",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT singer.Name, COUNT(*) AS number_of_concerts FROM singer JOIN singer_in_concert ON singer.Singer_ID = singer_in_concert.Singer_ID GROUP BY singer.Singer_ID, singer.Name;"
+        },
+        {
+          "sql": "SELECT singer.Name, COUNT(*) AS number_of_concerts FROM singer JOIN singer_in_concert ON singer.Singer_ID = singer_in_concert.Singer_ID GROUP BY singer.Singer_ID, singer.Name;"
+        },
+        {
+          "sql": "SELECT singer.Name, COUNT(*) AS number_of_concerts FROM singer JOIN singer_in_concert ON singer.Singer_ID = singer_in_concert.Singer_ID GROUP BY singer.Singer_ID, singer.Name;"
+        },
+        {
+          "sql": "SELECT singer.Name, COUNT(*) AS number_of_concerts FROM singer JOIN singer_in_concert ON singer.Singer_ID = singer_in_concert.Singer_ID GROUP BY singer.Singer_ID, singer.Name;"
+        },
+        {
+          "sql": "SELECT singer.Name, COUNT(*) AS number_of_concerts FROM singer JOIN singer_in_concert ON singer.Singer_ID = singer_in_concert.Singer_ID GROUP BY singer.Singer_ID, singer.Name;"
+        }
+      ]
+    },
+    {
+      "id": 36,
+      "question": "What are the names of the singers and number of concerts for each person?",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT singer.Name, COUNT(*) AS number_of_concerts FROM singer JOIN singer_in_concert ON singer.Singer_ID = singer_in_concert.Singer_ID GROUP BY singer.Singer_ID, singer.Name ORDER BY number_of_concerts DESC;"
+        },
+        {
+          "sql": "SELECT singer.Name, COUNT(*) AS number_of_concerts FROM singer JOIN singer_in_concert ON singer.Singer_ID = singer_in_concert.Singer_ID GROUP BY singer.Singer_ID, singer.Name;"
+        },
+        {
+          "sql": "SELECT singer.Name, COUNT(*) AS number_of_concerts FROM singer JOIN singer_in_concert ON singer.Singer_ID = singer_in_concert.Singer_ID GROUP BY singer.Singer_ID, singer.Name;"
+        },
+        {
+          "sql": "SELECT singer.Name, COUNT(*) AS number_of_concerts FROM singer JOIN singer_in_concert ON singer.Singer_ID = singer_in_concert.Singer_ID GROUP BY singer.Singer_ID, singer.Name;"
+        },
+        {
+          "sql": "SELECT singer.Name, COUNT(*) AS number_of_concerts FROM singer JOIN singer_in_concert ON singer.Singer_ID = singer_in_concert.Singer_ID GROUP BY singer.Singer_ID, singer.Name;"
+        }
+      ]
+    },
+    {
+      "id": 37,
+      "question": "List all singer names in concerts in year 2014.",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT DISTINCT singer.Name FROM singer JOIN singer_in_concert ON singer.Singer_ID = singer_in_concert.Singer_ID JOIN concert ON singer_in_concert.concert_ID = concert.concert_ID WHERE concert.Year = 2014;"
+        },
+        {
+          "sql": "SELECT DISTINCT singer.Name FROM singer JOIN singer_in_concert ON singer.Singer_ID = singer_in_concert.Singer_ID JOIN concert ON singer_in_concert.concert_ID = concert.concert_ID WHERE concert.Year = 2014;"
+        },
+        {
+          "sql": "SELECT DISTINCT singer.Name FROM singer JOIN singer_in_concert ON singer.Singer_ID = singer_in_concert.Singer_ID JOIN concert ON singer_in_concert.concert_ID = concert.concert_ID WHERE concert.Year = 2014;"
+        },
+        {
+          "sql": "SELECT DISTINCT singer.Name FROM singer JOIN singer_in_concert ON singer.Singer_ID = singer_in_concert.Singer_ID JOIN concert ON singer_in_concert.concert_ID = concert.concert_ID WHERE concert.Year = 2014;"
+        },
+        {
+          "sql": "SELECT DISTINCT singer.Name FROM singer JOIN singer_in_concert ON singer.Singer_ID = singer_in_concert.Singer_ID JOIN concert ON singer_in_concert.concert_ID = concert.concert_ID WHERE concert.Year = 2014;"
+        }
+      ]
+    },
+    {
+      "id": 38,
+      "question": "What are the names of the singers who performed in a concert in 2014?",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT DISTINCT singer.Name FROM singer JOIN singer_in_concert ON singer.Singer_ID = singer_in_concert.Singer_ID JOIN concert ON singer_in_concert.concert_ID = concert.concert_ID WHERE concert.Year = 2014;"
+        },
+        {
+          "sql": "SELECT DISTINCT singer.Name FROM singer JOIN singer_in_concert ON singer.Singer_ID = singer_in_concert.Singer_ID JOIN concert ON singer_in_concert.concert_ID = concert.concert_ID WHERE concert.Year = 2014;"
+        },
+        {
+          "sql": "SELECT DISTINCT singer.Name FROM singer JOIN singer_in_concert ON singer.Singer_ID = singer_in_concert.Singer_ID JOIN concert ON singer_in_concert.concert_ID = concert.concert_ID WHERE concert.Year = 2014;"
+        },
+        {
+          "sql": "SELECT DISTINCT singer.Name FROM singer JOIN singer_in_concert ON singer.Singer_ID = singer_in_concert.Singer_ID JOIN concert ON singer_in_concert.concert_ID = concert.concert_ID WHERE concert.Year = 2014;"
+        },
+        {
+          "sql": "SELECT DISTINCT singer.Name FROM singer JOIN singer_in_concert ON singer.Singer_ID = singer_in_concert.Singer_ID JOIN concert ON singer_in_concert.concert_ID = concert.concert_ID WHERE concert.Year = 2014;"
+        }
+      ]
+    },
+    {
+      "id": 39,
+      "question": "what is the name and nation of the singer who have a song having 'Hey' in its name?",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT Name, Country FROM singer WHERE Song_Name LIKE '%Hey%';"
+        },
+        {
+          "sql": "SELECT Name, Country FROM singer WHERE Song_Name LIKE '%Hey%';"
+        },
+        {
+          "sql": "SELECT Name, Country FROM singer WHERE Song_Name LIKE '%Hey%';"
+        },
+        {
+          "sql": "SELECT Name, Country FROM singer WHERE Song_Name LIKE '%Hey%';"
+        },
+        {
+          "sql": "SELECT Name, Country FROM singer WHERE Song_Name LIKE '%Hey%';"
+        }
+      ]
+    },
+    {
+      "id": 40,
+      "question": "What is the name and country of origin of every singer who has a song with the word 'Hey' in its title?",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT Name, Country FROM singer WHERE Song_Name LIKE '%Hey%';"
+        },
+        {
+          "sql": "SELECT Name, Country FROM singer WHERE Song_Name LIKE '%Hey%';"
+        },
+        {
+          "sql": "SELECT Name, Country FROM singer WHERE Song_Name LIKE '%Hey%';"
+        },
+        {
+          "sql": "SELECT Name, Country FROM singer WHERE Song_Name LIKE '%Hey%';"
+        },
+        {
+          "sql": "SELECT Name, Country FROM singer WHERE Song_Name LIKE '%Hey%';"
+        }
+      ]
+    },
+    {
+      "id": 41,
+      "question": "Find the name and location of the stadiums which some concerts happened in the years of both 2014 and 2015.",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT DISTINCT stadium.Name, stadium.Location FROM stadium JOIN concert ON stadium.Stadium_ID = concert.Stadium_ID WHERE concert.Year = 2014 AND stadium.Stadium_ID IN ( SELECT Stadium_ID FROM concert WHERE Year = 2015 );"
+        },
+        {
+          "sql": "SELECT DISTINCT stadium.Name, stadium.Location FROM stadium JOIN concert ON stadium.Stadium_ID = concert.Stadium_ID WHERE concert.Year = 2014 INTERSECT SELECT DISTINCT stadium.Name, stadium.Location FROM stadium JOIN concert ON stadium.Stadium_ID = concert.Stadium_ID WHERE concert.Year = 2015;"
+        },
+        {
+          "sql": "SELECT DISTINCT stadium.Name, stadium.Location FROM stadium JOIN concert ON stadium.Stadium_ID = concert.Stadium_ID WHERE concert.Year = 2014 INTERSECT SELECT DISTINCT stadium.Name, stadium.Location FROM stadium JOIN concert ON stadium.Stadium_ID = concert.Stadium_ID WHERE concert.Year = 2015;"
+        },
+        {
+          "sql": "SELECT DISTINCT stadium.Name, stadium.Location FROM stadium JOIN concert ON stadium.Stadium_ID = concert.Stadium_ID WHERE concert.Year = 2014 INTERSECT SELECT DISTINCT stadium.Name, stadium.Location FROM stadium JOIN concert ON stadium.Stadium_ID = concert.Stadium_ID WHERE concert.Year = 2015;"
+        },
+        {
+          "sql": "SELECT DISTINCT stadium.Name, stadium.Location FROM stadium JOIN concert ON stadium.Stadium_ID = concert.Stadium_ID WHERE concert.Year = 2014 INTERSECT SELECT DISTINCT stadium.Name, stadium.Location FROM stadium JOIN concert ON stadium.Stadium_ID = concert.Stadium_ID WHERE concert.Year = 2015;"
+        }
+      ]
+    },
+    {
+      "id": 42,
+      "question": "What are the names and locations of the stadiums that had concerts that occurred in both 2014 and 2015?",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT DISTINCT stadium.Name, stadium.Location FROM stadium JOIN concert ON stadium.Stadium_ID = concert.Stadium_ID WHERE concert.Year IN (2014, 2015) GROUP BY stadium.Stadium_ID, stadium.Name, stadium.Location HAVING COUNT(DISTINCT concert.Year) = 2;"
+        },
+        {
+          "sql": "SELECT DISTINCT stadium.Name, stadium.Location FROM stadium JOIN concert ON stadium.Stadium_ID = concert.Stadium_ID WHERE concert.Year IN (2014, 2015) GROUP BY stadium.Stadium_ID, stadium.Name, stadium.Location HAVING COUNT(DISTINCT concert.Year) = 2;"
+        },
+        {
+          "sql": "SELECT DISTINCT stadium.Name, stadium.Location FROM stadium JOIN concert ON stadium.Stadium_ID = concert.Stadium_ID WHERE concert.Year IN (2014, 2015) GROUP BY stadium.Stadium_ID, stadium.Name, stadium.Location HAVING COUNT(DISTINCT concert.Year) = 2;"
+        },
+        {
+          "sql": "SELECT DISTINCT stadium.Name, stadium.Location FROM stadium JOIN concert ON stadium.Stadium_ID = concert.Stadium_ID WHERE concert.Year IN (2014, 2015) GROUP BY stadium.Stadium_ID, stadium.Name, stadium.Location HAVING COUNT(DISTINCT concert.Year) = 2;"
+        },
+        {
+          "sql": "SELECT DISTINCT stadium.Name, stadium.Location FROM stadium JOIN concert ON stadium.Stadium_ID = concert.Stadium_ID WHERE concert.Year IN (2014, 2015) GROUP BY stadium.Stadium_ID, stadium.Name, stadium.Location HAVING COUNT(DISTINCT concert.Year) = 2;"
+        }
+      ]
+    },
+    {
+      "id": 43,
+      "question": "Find the number of concerts happened in the stadium with the highest capacity .",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT COUNT(*) FROM concert WHERE Stadium_ID = ( SELECT Stadium_ID FROM stadium ORDER BY Capacity DESC LIMIT 1 );"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM concert WHERE Stadium_ID = ( SELECT Stadium_ID FROM stadium ORDER BY Capacity DESC LIMIT 1 );"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM concert WHERE Stadium_ID = ( SELECT Stadium_ID FROM stadium ORDER BY Capacity DESC LIMIT 1 );"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM concert WHERE Stadium_ID = ( SELECT Stadium_ID FROM stadium ORDER BY Capacity DESC LIMIT 1 );"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM concert WHERE Stadium_ID = ( SELECT Stadium_ID FROM stadium ORDER BY Capacity DESC LIMIT 1 );"
+        }
+      ]
+    },
+    {
+      "id": 44,
+      "question": "What are the number of concerts that occurred in the stadium with the largest capacity ?",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT COUNT(*) FROM concert WHERE Stadium_ID = ( SELECT Stadium_ID FROM stadium ORDER BY Capacity DESC LIMIT 1 );"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM concert WHERE Stadium_ID = ( SELECT Stadium_ID FROM stadium ORDER BY Capacity DESC LIMIT 1 );"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM concert WHERE Stadium_ID = ( SELECT Stadium_ID FROM stadium ORDER BY Capacity DESC LIMIT 1 );"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM concert WHERE Stadium_ID = ( SELECT Stadium_ID FROM stadium ORDER BY Capacity DESC LIMIT 1 );"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM concert WHERE Stadium_ID = ( SELECT Stadium_ID FROM stadium ORDER BY Capacity DESC LIMIT 1 );"
+        }
+      ]
+    },
+    {
+      "id": 45,
+      "question": "Find the number of pets whose weight is heavier than 10.",
+      "db_id": "pets_1",
+      "candidates": [
+        {
+          "sql": "SELECT COUNT(*) FROM Pets WHERE weight > 10;"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM Pets WHERE weight > 10;"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM Pets WHERE weight > 10;"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM Pets WHERE weight > 10;"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM Pets WHERE weight > 10;"
+        }
+      ]
+    },
+    {
+      "id": 46,
+      "question": "How many pets have a greater weight than 10?",
+      "db_id": "pets_1",
+      "candidates": [
+        {
+          "sql": "SELECT COUNT(*) FROM Pets WHERE weight > 10;"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM Pets WHERE weight > 10;"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM Pets WHERE weight > 10;"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM Pets WHERE weight > 10;"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM Pets WHERE weight > 10;"
+        }
+      ]
+    },
+    {
+      "id": 47,
+      "question": "Find the weight of the youngest dog.",
+      "db_id": "pets_1",
+      "candidates": [
+        {
+          "sql": "SELECT weight FROM Pets WHERE PetType = 'dog' ORDER BY pet_age ASC LIMIT 1;"
+        },
+        {
+          "sql": "SELECT weight FROM Pets WHERE PetType = 'dog' ORDER BY pet_age ASC LIMIT 1;"
+        },
+        {
+          "sql": "SELECT weight FROM Pets WHERE PetType = 'dog' ORDER BY pet_age ASC LIMIT 1;"
+        },
+        {
+          "sql": "SELECT weight FROM Pets WHERE PetType = 'dog' ORDER BY pet_age ASC LIMIT 1;"
+        },
+        {
+          "sql": "SELECT weight FROM Pets WHERE PetType = 'dog' ORDER BY pet_age ASC LIMIT 1;"
+        }
+      ]
+    },
+    {
+      "id": 48,
+      "question": "How much does the youngest dog weigh?",
+      "db_id": "pets_1",
+      "candidates": [
+        {
+          "sql": "SELECT weight FROM Pets WHERE PetType = 'dog' ORDER BY pet_age ASC LIMIT 1;"
+        },
+        {
+          "sql": "SELECT weight FROM Pets WHERE PetType = 'dog' ORDER BY pet_age ASC LIMIT 1;"
+        },
+        {
+          "sql": "SELECT weight FROM Pets WHERE PetType = 'dog' ORDER BY pet_age ASC LIMIT 1;"
+        },
+        {
+          "sql": "SELECT weight FROM Pets WHERE PetType = 'dog' ORDER BY pet_age ASC LIMIT 1;"
+        },
+        {
+          "sql": "SELECT weight FROM Pets WHERE PetType = 'dog' ORDER BY pet_age ASC LIMIT 1;"
+        }
+      ]
+    },
+    {
+      "id": 49,
+      "question": "Find the maximum weight for each type of pet. List the maximum weight and pet type.",
+      "db_id": "pets_1",
+      "candidates": [
+        {
+          "sql": "SELECT PetType, MAX(weight) FROM Pets GROUP BY PetType;"
+        },
+        {
+          "sql": "SELECT PetType, MAX(weight) FROM Pets GROUP BY PetType;"
+        },
+        {
+          "sql": "SELECT PetType, MAX(weight) FROM Pets GROUP BY PetType;"
+        },
+        {
+          "sql": "SELECT PetType, MAX(weight) FROM Pets GROUP BY PetType;"
+        },
+        {
+          "sql": "SELECT PetType, MAX(weight) FROM Pets GROUP BY PetType;"
+        }
+      ]
+    },
+    {
+      "id": 50,
+      "question": "List the maximum weight and type for each type of pet.",
+      "db_id": "pets_1",
+      "candidates": [
+        {
+          "sql": "SELECT PetType, MAX(weight) AS max_weight FROM Pets GROUP BY PetType;"
+        },
+        {
+          "sql": "SELECT PetType, MAX(weight) AS max_weight FROM Pets GROUP BY PetType;"
+        },
+        {
+          "sql": "SELECT PetType, MAX(weight) AS max_weight FROM Pets GROUP BY PetType;"
+        },
+        {
+          "sql": "SELECT PetType, MAX(weight) AS max_weight FROM Pets GROUP BY PetType;"
+        },
+        {
+          "sql": "SELECT PetType, MAX(weight) AS max_weight FROM Pets GROUP BY PetType;"
+        }
+      ]
+    },
+    {
+      "id": 51,
+      "question": "Find number of pets owned by students who are older than 20.",
+      "db_id": "pets_1",
+      "candidates": [
+        {
+          "sql": "SELECT COUNT(*) FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID WHERE Student.Age > 20;"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID WHERE Student.Age > 20;"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID WHERE Student.Age > 20;"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID WHERE Student.Age > 20;"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID WHERE Student.Age > 20;"
+        }
+      ]
+    },
+    {
+      "id": 52,
+      "question": "How many pets are owned by students that have an age greater than 20?",
+      "db_id": "pets_1",
+      "candidates": [
+        {
+          "sql": "SELECT COUNT(*) FROM Has_Pet JOIN Student ON Has_Pet.StuID = Student.StuID WHERE Student.Age > 20;"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM Has_Pet JOIN Student ON Has_Pet.StuID = Student.StuID WHERE Student.Age > 20;"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID WHERE Student.Age > 20;"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM Has_Pet JOIN Student ON Has_Pet.StuID = Student.StuID WHERE Student.Age > 20;"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM Has_Pet JOIN Student ON Has_Pet.StuID = Student.StuID WHERE Student.Age > 20;"
+        }
+      ]
+    },
+    {
+      "id": 53,
+      "question": "Find the number of dog pets that are raised by female students (with sex F).",
+      "db_id": "pets_1",
+      "candidates": [
+        {
+          "sql": "SELECT COUNT(*) FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Student.Sex = 'F' AND Pets.PetType = 'dog';"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Student.Sex = 'F' AND Pets.PetType = 'dog';"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Student.Sex = 'F' AND Pets.PetType = 'dog';"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Student.Sex = 'F' AND Pets.PetType = 'dog';"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Student.Sex = 'F' AND Pets.PetType = 'dog';"
+        }
+      ]
+    },
+    {
+      "id": 54,
+      "question": "How many dog pets are raised by female students?",
+      "db_id": "pets_1",
+      "candidates": [
+        {
+          "sql": "SELECT COUNT(*) FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Student.Sex = 'F' AND Pets.PetType = 'dog';"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Student.Sex = 'F' AND Pets.PetType = 'dog';"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Student.Sex = 'F' AND Pets.PetType = 'dog';"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Student.Sex = 'F' AND Pets.PetType = 'dog';"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Student.Sex = 'F' AND Pets.PetType = 'dog';"
+        }
+      ]
+    },
+    {
+      "id": 55,
+      "question": "Find the number of distinct type of pets.",
+      "db_id": "pets_1",
+      "candidates": [
+        {
+          "sql": "SELECT COUNT(DISTINCT PetType) FROM Pets;"
+        },
+        {
+          "sql": "SELECT COUNT(DISTINCT PetType) FROM Pets;"
+        },
+        {
+          "sql": "SELECT COUNT(DISTINCT PetType) FROM Pets;"
+        },
+        {
+          "sql": "SELECT COUNT(DISTINCT PetType) FROM Pets;"
+        },
+        {
+          "sql": "SELECT COUNT(DISTINCT PetType) FROM Pets;"
+        }
+      ]
+    },
+    {
+      "id": 56,
+      "question": "How many different types of pet are there?",
+      "db_id": "pets_1",
+      "candidates": [
+        {
+          "sql": "SELECT COUNT(DISTINCT PetType) FROM Pets;"
+        },
+        {
+          "sql": "SELECT COUNT(DISTINCT PetType) FROM Pets;"
+        },
+        {
+          "sql": "SELECT COUNT(DISTINCT PetType) FROM Pets;"
+        },
+        {
+          "sql": "SELECT COUNT(DISTINCT PetType) FROM Pets;"
+        },
+        {
+          "sql": "SELECT COUNT(DISTINCT PetType) FROM Pets;"
+        }
+      ]
+    },
+    {
+      "id": 57,
+      "question": "Find the first name of students who have cat or dog pet.",
+      "db_id": "pets_1",
+      "candidates": [
+        {
+          "sql": "SELECT Student.Fname FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType IN ('cat', 'dog') GROUP BY Student.StuID, Student.Fname;"
+        },
+        {
+          "sql": "SELECT Student.Fname FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType IN ('cat', 'dog') GROUP BY Student.StuID, Student.Fname;"
+        },
+        {
+          "sql": "SELECT Student.Fname FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType IN ('cat', 'dog') GROUP BY Student.StuID, Student.Fname;"
+        },
+        {
+          "sql": "SELECT Student.Fname FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType IN ('cat', 'dog') GROUP BY Student.StuID, Student.Fname;"
+        },
+        {
+          "sql": "SELECT Student.Fname FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType IN ('cat', 'dog') GROUP BY Student.StuID, Student.Fname;"
+        }
+      ]
+    },
+    {
+      "id": 58,
+      "question": "What are the first names of every student who has a cat or dog as a pet?",
+      "db_id": "pets_1",
+      "candidates": [
+        {
+          "sql": "SELECT DISTINCT Student.Fname FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType IN ('cat', 'dog')"
+        },
+        {
+          "sql": "SELECT DISTINCT Student.Fname FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType IN ('cat', 'dog')"
+        },
+        {
+          "sql": "SELECT DISTINCT Student.Fname FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType IN ('cat', 'dog')"
+        },
+        {
+          "sql": "SELECT DISTINCT Student.Fname FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType IN ('cat', 'dog')"
+        },
+        {
+          "sql": "SELECT DISTINCT Student.Fname FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType IN ('cat', 'dog')"
+        }
+      ]
+    },
+    {
+      "id": 59,
+      "question": "Find the first name of students who have both cat and dog pets .",
+      "db_id": "pets_1",
+      "candidates": [
+        {
+          "sql": "SELECT DISTINCT Student.Fname FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets AS cat_pets ON Has_Pet.PetID = cat_pets.PetID AND cat_pets.PetType = 'cat' JOIN Has_Pet AS dog_has_pet ON Student.StuID = dog_has_pet.StuID JOIN Pets AS dog_pets ON dog_has_pet.PetID = dog_pets.PetID AND dog_pets.PetType = 'dog"
+        },
+        {
+          "sql": "SELECT DISTINCT Student.Fname FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets AS cat_pets ON Has_Pet.PetID = cat_pets.PetID AND cat_pets.PetType = 'cat' JOIN Has_Pet AS dog_has_pet ON Student.StuID = dog_has_pet.StuID JOIN Pets AS dog_pets ON dog_has_pet.PetID = dog_pets.PetID AND dog_pets.PetType = 'dog"
+        },
+        {
+          "sql": "SELECT DISTINCT Student.Fname FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets AS cat_pets ON Has_Pet.PetID = cat_pets.PetID AND cat_pets.PetType = 'cat' JOIN Has_Pet AS dog_has_pet ON Student.StuID = dog_has_pet.StuID JOIN Pets AS dog_pets ON dog_has_pet.PetID = dog_pets.PetID AND dog_pets.PetType = 'dog"
+        },
+        {
+          "sql": "SELECT DISTINCT Student.Fname FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets AS cat_pets ON Has_Pet.PetID = cat_pets.PetID AND cat_pets.PetType = 'cat' JOIN Has_Pet AS dog_has_pet ON Student.StuID = dog_has_pet.StuID JOIN Pets AS dog_pets ON dog_has_pet.PetID = dog_pets.PetID AND dog_pets.PetType = 'dog"
+        },
+        {
+          "sql": "SELECT DISTINCT Student.Fname FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets AS cat_pets ON Has_Pet.PetID = cat_pets.PetID AND cat_pets.PetType = 'cat' JOIN Has_Pet AS dog_has_pet ON Student.StuID = dog_has_pet.StuID JOIN Pets AS dog_pets ON dog_has_pet.PetID = dog_pets.PetID AND dog_pets.PetType = 'dog"
+        }
+      ]
+    },
+    {
+      "id": 60,
+      "question": "What are the students' first names who have both cats and dogs as pets?",
+      "db_id": "pets_1",
+      "candidates": [
+        {
+          "sql": "SELECT DISTINCT Student.Fname FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets AS cat_pets ON Has_Pet.PetID = cat_pets.PetID AND cat_pets.PetType = 'cat' JOIN Has_Pet AS dog_has_pet ON Student.StuID = dog_has_pet.StuID JOIN Pets AS dog_pets ON dog_has_pet.PetID = dog_pets.PetID AND dog_pets.PetType = 'dog"
+        },
+        {
+          "sql": "SELECT DISTINCT Student.Fname FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets AS cat_pets ON Has_Pet.PetID = cat_pets.PetID AND cat_pets.PetType = 'cat' JOIN Has_Pet AS dog_has_pet ON Student.StuID = dog_has_pet.StuID JOIN Pets AS dog_pets ON dog_has_pet.PetID = dog_pets.PetID AND dog_pets.PetType = 'dog"
+        },
+        {
+          "sql": "SELECT DISTINCT Student.Fname FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets AS cat_pets ON Has_Pet.PetID = cat_pets.PetID AND cat_pets.PetType = 'cat' JOIN Has_Pet AS dog_has_pet ON Student.StuID = dog_has_pet.StuID JOIN Pets AS dog_pets ON dog_has_pet.PetID = dog_pets.PetID AND dog_pets.PetType = 'dog"
+        },
+        {
+          "sql": "SELECT DISTINCT Student.Fname FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets AS cat_pets ON Has_Pet.PetID = cat_pets.PetID AND cat_pets.PetType = 'cat' JOIN Has_Pet AS dog_has_pet ON Student.StuID = dog_has_pet.StuID JOIN Pets AS dog_pets ON dog_has_pet.PetID = dog_pets.PetID AND dog_pets.PetType = 'dog"
+        },
+        {
+          "sql": "SELECT DISTINCT Student.Fname FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets AS cat_pets ON Has_Pet.PetID = cat_pets.PetID AND cat_pets.PetType = 'cat' JOIN Has_Pet AS dog_has_pet ON Student.StuID = dog_has_pet.StuID JOIN Pets AS dog_pets ON dog_has_pet.PetID = dog_pets.PetID AND dog_pets.PetType = 'dog"
+        }
+      ]
+    },
+    {
+      "id": 61,
+      "question": "Find the major and age of students who do not have a cat pet.",
+      "db_id": "pets_1",
+      "candidates": [
+        {
+          "sql": "SELECT Student.Major, Student.Age FROM Student WHERE Student.StuID NOT IN ( SELECT Has_Pet.StuID FROM Has_Pet JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'cat' )"
+        },
+        {
+          "sql": "SELECT Student.Major, Student.Age FROM Student WHERE Student.StuID NOT IN ( SELECT Has_Pet.StuID FROM Has_Pet JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'cat' )"
+        },
+        {
+          "sql": "SELECT Student.Major, Student.Age FROM Student WHERE Student.StuID NOT IN ( SELECT Has_Pet.StuID FROM Has_Pet JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'cat' )"
+        },
+        {
+          "sql": "SELECT Student.Major, Student.Age FROM Student WHERE Student.StuID NOT IN ( SELECT Has_Pet.StuID FROM Has_Pet JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'cat' )"
+        },
+        {
+          "sql": "SELECT Student.Major, Student.Age FROM Student WHERE Student.StuID NOT IN ( SELECT Has_Pet.StuID FROM Has_Pet JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'cat' )"
+        }
+      ]
+    },
+    {
+      "id": 62,
+      "question": "What major is every student who does not own a cat as a pet, and also how old are they?",
+      "db_id": "pets_1",
+      "candidates": [
+        {
+          "sql": "SELECT Student.Major, Student.Age FROM Student WHERE Student.StuID NOT IN ( SELECT Has_Pet.StuID FROM Has_Pet JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'cat' ) ORDER BY Student.Major, Student.Age;"
+        },
+        {
+          "sql": "SELECT Student.Major, Student.Age FROM Student WHERE Student.StuID NOT IN ( SELECT Has_Pet.StuID FROM Has_Pet JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'cat' ) ORDER BY Student.Major, Student.Age;"
+        },
+        {
+          "sql": "SELECT Student.Major, Student.Age FROM Student WHERE Student.StuID NOT IN ( SELECT Has_Pet.StuID FROM Has_Pet JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'cat' ) ORDER BY Student.Major, Student.Age;"
+        },
+        {
+          "sql": "SELECT Student.Major, Student.Age FROM Student WHERE Student.StuID NOT IN ( SELECT Has_Pet.StuID FROM Has_Pet JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'cat' ) ORDER BY Student.Major, Student.Age;"
+        },
+        {
+          "sql": "SELECT Student.Major, Student.Age FROM Student WHERE Student.StuID NOT IN ( SELECT Has_Pet.StuID FROM Has_Pet JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'cat' ) ORDER BY Student.Major, Student.Age;"
+        }
+      ]
+    },
+    {
+      "id": 63,
+      "question": "Find the id of students who do not have a cat pet.",
+      "db_id": "pets_1",
+      "candidates": [
+        {
+          "sql": "SELECT Student.StuID FROM Student WHERE Student.StuID NOT IN ( SELECT Has_Pet.StuID FROM Has_Pet JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'cat' )"
+        },
+        {
+          "sql": "SELECT Student.StuID FROM Student WHERE Student.StuID NOT IN ( SELECT Has_Pet.StuID FROM Has_Pet JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'cat' )"
+        },
+        {
+          "sql": "SELECT Student.StuID FROM Student WHERE Student.StuID NOT IN ( SELECT Has_Pet.StuID FROM Has_Pet JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'cat' )"
+        },
+        {
+          "sql": "SELECT Student.StuID FROM Student WHERE Student.StuID NOT IN ( SELECT Has_Pet.StuID FROM Has_Pet JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'cat' )"
+        },
+        {
+          "sql": "SELECT Student.StuID FROM Student WHERE Student.StuID NOT IN ( SELECT Has_Pet.StuID FROM Has_Pet JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'cat' )"
+        }
+      ]
+    },
+    {
+      "id": 64,
+      "question": "What are the ids of the students who do not own cats as pets?",
+      "db_id": "pets_1",
+      "candidates": [
+        {
+          "sql": "SELECT Student.StuID FROM Student WHERE Student.StuID NOT IN ( SELECT Has_Pet.StuID FROM Has_Pet JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'cat' )"
+        },
+        {
+          "sql": "SELECT Student.StuID FROM Student WHERE Student.StuID NOT IN ( SELECT Has_Pet.StuID FROM Has_Pet JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'cat' )"
+        },
+        {
+          "sql": "SELECT Student.StuID FROM Student WHERE Student.StuID NOT IN ( SELECT Has_Pet.StuID FROM Has_Pet JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'cat' )"
+        },
+        {
+          "sql": "SELECT Student.StuID FROM Student WHERE Student.StuID NOT IN ( SELECT Has_Pet.StuID FROM Has_Pet JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'cat' )"
+        },
+        {
+          "sql": "SELECT Student.StuID FROM Student WHERE Student.StuID NOT IN ( SELECT Has_Pet.StuID FROM Has_Pet JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'cat' )"
+        }
+      ]
+    },
+    {
+      "id": 65,
+      "question": "Find the first name and age of students who have a dog but do not have a cat as a pet.",
+      "db_id": "pets_1",
+      "candidates": [
+        {
+          "sql": "SELECT Student.Fname, Student.Age FROM Student WHERE Student.StuID IN ( SELECT Has_Pet.StuID FROM Has_Pet JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'dog' ) AND Student.StuID NOT IN ( SELECT Has_Pet.StuID FROM Has_Pet JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'cat' );"
+        },
+        {
+          "sql": "SELECT Student.Fname, Student.Age FROM Student WHERE Student.StuID IN ( SELECT Has_Pet.StuID FROM Has_Pet JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'dog' ) AND Student.StuID NOT IN ( SELECT Has_Pet.StuID FROM Has_Pet JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'cat' );"
+        },
+        {
+          "sql": "SELECT Student.Fname, Student.Age FROM Student WHERE Student.StuID IN ( SELECT Has_Pet.StuID FROM Has_Pet JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'dog' ) AND Student.StuID NOT IN ( SELECT Has_Pet.StuID FROM Has_Pet JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'cat' );"
+        },
+        {
+          "sql": "SELECT Student.Fname, Student.Age FROM Student WHERE Student.StuID IN ( SELECT Has_Pet.StuID FROM Has_Pet JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'dog' ) AND Student.StuID NOT IN ( SELECT Has_Pet.StuID FROM Has_Pet JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'cat' );"
+        },
+        {
+          "sql": "SELECT Student.Fname, Student.Age FROM Student WHERE Student.StuID IN ( SELECT Has_Pet.StuID FROM Has_Pet JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'dog' ) AND Student.StuID NOT IN ( SELECT Has_Pet.StuID FROM Has_Pet JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'cat' );"
+        }
+      ]
+    },
+    {
+      "id": 66,
+      "question": "What is the first name of every student who has a dog but does not have a cat?",
+      "db_id": "pets_1",
+      "candidates": [
+        {
+          "sql": "SELECT DISTINCT Student.Fname FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'dog' AND Student.StuID NOT IN ( SELECT Has_Pet.StuID FROM Has_Pet JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'cat' );"
+        },
+        {
+          "sql": "SELECT DISTINCT Student.Fname FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'dog' AND Student.StuID NOT IN ( SELECT Has_Pet.StuID FROM Has_Pet JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'cat' );"
+        },
+        {
+          "sql": "SELECT DISTINCT Student.Fname FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'dog' AND Student.StuID NOT IN ( SELECT Has_Pet.StuID FROM Has_Pet JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'cat' );"
+        },
+        {
+          "sql": "SELECT DISTINCT Student.Fname FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'dog' AND Student.StuID NOT IN ( SELECT Has_Pet.StuID FROM Has_Pet JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'cat' );"
+        },
+        {
+          "sql": "SELECT DISTINCT Student.Fname FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'dog' AND Student.StuID NOT IN ( SELECT Has_Pet.StuID FROM Has_Pet JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'cat' );"
+        }
+      ]
+    },
+    {
+      "id": 67,
+      "question": "Find the type and weight of the youngest pet.",
+      "db_id": "pets_1",
+      "candidates": [
+        {
+          "sql": "SELECT PetType, weight FROM Pets ORDER BY pet_age ASC LIMIT 1;"
+        },
+        {
+          "sql": "SELECT PetType, weight FROM Pets ORDER BY pet_age ASC LIMIT 1;"
+        },
+        {
+          "sql": "SELECT PetType, weight FROM Pets ORDER BY pet_age ASC LIMIT 1;"
+        },
+        {
+          "sql": "SELECT PetType, weight FROM Pets ORDER BY pet_age ASC LIMIT 1;"
+        },
+        {
+          "sql": "SELECT PetType, weight FROM Pets ORDER BY pet_age ASC LIMIT 1;"
+        }
+      ]
+    },
+    {
+      "id": 68,
+      "question": "What type of pet is the youngest animal, and how much does it weigh?",
+      "db_id": "pets_1",
+      "candidates": [
+        {
+          "sql": "SELECT PetType, weight FROM Pets ORDER BY pet_age ASC LIMIT 1;"
+        },
+        {
+          "sql": "SELECT PetType, weight FROM Pets ORDER BY pet_age ASC LIMIT 1;"
+        },
+        {
+          "sql": "SELECT PetType, weight FROM Pets ORDER BY pet_age ASC LIMIT 1;"
+        },
+        {
+          "sql": "SELECT PetType, weight FROM Pets ORDER BY pet_age ASC LIMIT 1;"
+        },
+        {
+          "sql": "SELECT PetType, weight FROM Pets ORDER BY pet_age ASC LIMIT 1;"
+        }
+      ]
+    },
+    {
+      "id": 69,
+      "question": "Find the id and weight of all pets whose age is older than 1.",
+      "db_id": "pets_1",
+      "candidates": [
+        {
+          "sql": "SELECT PetID, weight FROM Pets WHERE pet_age > 1;"
+        },
+        {
+          "sql": "SELECT PetID, weight FROM Pets WHERE pet_age > 1;"
+        },
+        {
+          "sql": "SELECT PetID, weight FROM Pets WHERE pet_age > 1;"
+        },
+        {
+          "sql": "SELECT PetID, weight FROM Pets WHERE pet_age > 1;"
+        },
+        {
+          "sql": "SELECT PetID, weight FROM Pets WHERE pet_age > 1;"
+        }
+      ]
+    },
+    {
+      "id": 70,
+      "question": "What is the id and weight of every pet who is older than 1?",
+      "db_id": "pets_1",
+      "candidates": [
+        {
+          "sql": "SELECT PetID, weight FROM Pets WHERE pet_age > 1;"
+        },
+        {
+          "sql": "SELECT PetID, weight FROM Pets WHERE pet_age > 1;"
+        },
+        {
+          "sql": "SELECT PetID, weight FROM Pets WHERE pet_age > 1;"
+        },
+        {
+          "sql": "SELECT PetID, weight FROM Pets WHERE pet_age > 1;"
+        },
+        {
+          "sql": "SELECT PetID, weight FROM Pets WHERE pet_age > 1;"
+        }
+      ]
+    },
+    {
+      "id": 71,
+      "question": "Find the average and maximum age for each type of pet.",
+      "db_id": "pets_1",
+      "candidates": [
+        {
+          "sql": "SELECT Pets.PetType, AVG(Pets.pet_age) AS average_age, MAX(Pets.pet_age) AS maximum_age FROM Pets GROUP BY Pets.PetType;"
+        },
+        {
+          "sql": "SELECT Pets.PetType, AVG(Pets.pet_age) AS average_age, MAX(Pets.pet_age) AS maximum_age FROM Pets GROUP BY Pets.PetType;"
+        },
+        {
+          "sql": "SELECT Pets.PetType, AVG(Pets.pet_age) AS average_age, MAX(Pets.pet_age) AS maximum_age FROM Pets GROUP BY Pets.PetType;"
+        },
+        {
+          "sql": "SELECT Pets.PetType, AVG(Pets.pet_age) AS average_age, MAX(Pets.pet_age) AS maximum_age FROM Pets GROUP BY Pets.PetType;"
+        },
+        {
+          "sql": "SELECT Pets.PetType, AVG(Pets.pet_age) AS average_age, MAX(Pets.pet_age) AS maximum_age FROM Pets GROUP BY Pets.PetType;"
+        }
+      ]
+    },
+    {
+      "id": 72,
+      "question": "What is the average and maximum age for each pet type?",
+      "db_id": "pets_1",
+      "candidates": [
+        {
+          "sql": "SELECT PetType, AVG(pet_age) AS average_age, MAX(pet_age) AS maximum_age FROM Pets GROUP BY PetType;"
+        },
+        {
+          "sql": "SELECT PetType, AVG(pet_age) AS average_age, MAX(pet_age) AS maximum_age FROM Pets GROUP BY PetType;"
+        },
+        {
+          "sql": "SELECT PetType, AVG(pet_age) AS average_age, MAX(pet_age) AS maximum_age FROM Pets GROUP BY PetType;"
+        },
+        {
+          "sql": "SELECT PetType, AVG(pet_age) AS average_age, MAX(pet_age) AS maximum_age FROM Pets GROUP BY PetType;"
+        },
+        {
+          "sql": "SELECT PetType, AVG(pet_age) AS average_age, MAX(pet_age) AS maximum_age FROM Pets GROUP BY PetType;"
+        }
+      ]
+    },
+    {
+      "id": 73,
+      "question": "Find the average weight for each pet type.",
+      "db_id": "pets_1",
+      "candidates": [
+        {
+          "sql": "SELECT PetType, AVG(weight) FROM Pets GROUP BY PetType;"
+        },
+        {
+          "sql": "SELECT PetType, AVG(weight) FROM Pets GROUP BY PetType;"
+        },
+        {
+          "sql": "SELECT PetType, AVG(weight) FROM Pets GROUP BY PetType;"
+        },
+        {
+          "sql": "SELECT PetType, AVG(weight) FROM Pets GROUP BY PetType;"
+        },
+        {
+          "sql": "SELECT PetType, AVG(weight) FROM Pets GROUP BY PetType;"
+        }
+      ]
+    },
+    {
+      "id": 74,
+      "question": "What is the average weight for each type of pet?",
+      "db_id": "pets_1",
+      "candidates": [
+        {
+          "sql": "SELECT PetType, AVG(weight) FROM Pets GROUP BY PetType;"
+        },
+        {
+          "sql": "SELECT PetType, AVG(weight) FROM Pets GROUP BY PetType;"
+        },
+        {
+          "sql": "SELECT PetType, AVG(weight) FROM Pets GROUP BY PetType;"
+        },
+        {
+          "sql": "SELECT PetType, AVG(weight) FROM Pets GROUP BY PetType;"
+        },
+        {
+          "sql": "SELECT PetType, AVG(weight) FROM Pets GROUP BY PetType;"
+        }
+      ]
+    },
+    {
+      "id": 75,
+      "question": "Find the first name and age of students who have a pet.",
+      "db_id": "pets_1",
+      "candidates": [
+        {
+          "sql": "SELECT Fname, Age FROM Student WHERE StuID IN (SELECT StuID FROM Has_Pet)"
+        },
+        {
+          "sql": "SELECT Fname, Age FROM Student WHERE StuID IN (SELECT StuID FROM Has_Pet)"
+        },
+        {
+          "sql": "SELECT Fname, Age FROM Student WHERE StuID IN (SELECT StuID FROM Has_Pet)"
+        },
+        {
+          "sql": "SELECT Fname, Age FROM Student WHERE StuID IN (SELECT StuID FROM Has_Pet)"
+        },
+        {
+          "sql": "SELECT Fname, Age FROM Student WHERE StuID IN (SELECT StuID FROM Has_Pet)"
+        }
+      ]
+    },
+    {
+      "id": 76,
+      "question": "What are the different first names and ages of the students who do have pets?",
+      "db_id": "pets_1",
+      "candidates": [
+        {
+          "sql": "SELECT DISTINCT Fname, Age FROM Student WHERE StuID IN (SELECT StuID FROM Has_Pet)"
+        },
+        {
+          "sql": "SELECT DISTINCT Fname, Age FROM Student WHERE StuID IN (SELECT StuID FROM Has_Pet)"
+        },
+        {
+          "sql": "SELECT DISTINCT Fname, Age FROM Student WHERE StuID IN (SELECT StuID FROM Has_Pet)"
+        },
+        {
+          "sql": "SELECT DISTINCT Fname, Age FROM Student WHERE StuID IN (SELECT StuID FROM Has_Pet)"
+        },
+        {
+          "sql": "SELECT DISTINCT Fname, Age FROM Student WHERE StuID IN (SELECT StuID FROM Has_Pet)"
+        }
+      ]
+    },
+    {
+      "id": 77,
+      "question": "Find the id of the pet owned by student whose last name is \u2018Smith\u2019.",
+      "db_id": "pets_1",
+      "candidates": [
+        {
+          "sql": "SELECT Pets.PetID FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Student.LName = 'Smith"
+        },
+        {
+          "sql": "SELECT Pets.PetID FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Student.LName = 'Smith"
+        },
+        {
+          "sql": "SELECT Pets.PetID FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Student.LName = 'Smith"
+        },
+        {
+          "sql": "SELECT Pets.PetID FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Student.LName = 'Smith"
+        },
+        {
+          "sql": "SELECT Pets.PetID FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Student.LName = 'Smith"
+        }
+      ]
+    },
+    {
+      "id": 78,
+      "question": "What is the id of the pet owned by the student whose last name is 'Smith'?",
+      "db_id": "pets_1",
+      "candidates": [
+        {
+          "sql": "SELECT Has_Pet.PetID FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID WHERE Student.LName = 'Smith"
+        },
+        {
+          "sql": "SELECT Pets.PetID FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Student.LName = 'Smith"
+        },
+        {
+          "sql": "SELECT Pets.PetID FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Student.LName = 'Smith"
+        },
+        {
+          "sql": "SELECT Pets.PetID FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Student.LName = 'Smith"
+        },
+        {
+          "sql": "SELECT Pets.PetID FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Student.LName = 'Smith"
+        }
+      ]
+    },
+    {
+      "id": 79,
+      "question": "Find the number of pets for each student who has any pet and student id.",
+      "db_id": "pets_1",
+      "candidates": [
+        {
+          "sql": "SELECT Student.StuID, COUNT(*) AS num_pets FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID GROUP BY Student.StuID HAVING COUNT(*) > 0;"
+        },
+        {
+          "sql": "SELECT Student.StuID, COUNT(*) AS num_pets FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID GROUP BY Student.StuID HAVING COUNT(*) > 0;"
+        },
+        {
+          "sql": "SELECT Student.StuID, COUNT(*) AS num_pets FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID GROUP BY Student.StuID HAVING COUNT(*) > 0;"
+        },
+        {
+          "sql": "SELECT Student.StuID, COUNT(*) AS num_pets FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID GROUP BY Student.StuID HAVING COUNT(*) > 0;"
+        },
+        {
+          "sql": "SELECT Student.StuID, COUNT(*) AS num_pets FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID GROUP BY Student.StuID HAVING COUNT(*) > 0;"
+        }
+      ]
+    },
+    {
+      "id": 80,
+      "question": "For students who have pets , how many pets does each student have ? list their ids instead of names .",
+      "db_id": "pets_1",
+      "candidates": [
+        {
+          "sql": "SELECT Student.StuID, COUNT(*) AS pet_count FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID GROUP BY Student.StuID ORDER BY Student.StuID;"
+        },
+        {
+          "sql": "SELECT Student.StuID, COUNT(*) AS pet_count FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID GROUP BY Student.StuID ORDER BY Student.StuID;"
+        },
+        {
+          "sql": "SELECT Student.StuID, COUNT(*) AS pet_count FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID GROUP BY Student.StuID ORDER BY Student.StuID;"
+        },
+        {
+          "sql": "SELECT Student.StuID, COUNT(*) AS pet_count FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID GROUP BY Student.StuID ORDER BY Student.StuID;"
+        },
+        {
+          "sql": "SELECT Student.StuID, COUNT(*) AS pet_count FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID GROUP BY Student.StuID ORDER BY Student.StuID;"
+        }
+      ]
+    },
+    {
+      "id": 81,
+      "question": "Find the first name and gender of student who have more than one pet.",
+      "db_id": "pets_1",
+      "candidates": [
+        {
+          "sql": "SELECT Fname, Sex FROM Student WHERE StuID IN ( SELECT StuID FROM Has_Pet GROUP BY StuID HAVING COUNT(*) > 1 )"
+        },
+        {
+          "sql": "SELECT Fname, Sex FROM Student WHERE StuID IN ( SELECT StuID FROM Has_Pet GROUP BY StuID HAVING COUNT(*) > 1 )"
+        },
+        {
+          "sql": "SELECT Fname, Sex FROM Student WHERE StuID IN ( SELECT StuID FROM Has_Pet GROUP BY StuID HAVING COUNT(*) > 1 )"
+        },
+        {
+          "sql": "SELECT Fname, Sex FROM Student WHERE StuID IN ( SELECT StuID FROM Has_Pet GROUP BY StuID HAVING COUNT(*) > 1 )"
+        },
+        {
+          "sql": "SELECT Fname, Sex FROM Student WHERE StuID IN ( SELECT StuID FROM Has_Pet GROUP BY StuID HAVING COUNT(*) > 1 )"
+        }
+      ]
+    },
+    {
+      "id": 82,
+      "question": "What is the first name and gender of the all the students who have more than one pet?",
+      "db_id": "pets_1",
+      "candidates": [
+        {
+          "sql": "SELECT Fname, Sex FROM Student WHERE StuID IN ( SELECT StuID FROM Has_Pet GROUP BY StuID HAVING COUNT(*) > 1 ) ORDER BY Fname;"
+        },
+        {
+          "sql": "SELECT Fname, Sex FROM Student WHERE StuID IN ( SELECT StuID FROM Has_Pet GROUP BY StuID HAVING COUNT(*) > 1 ) ORDER BY Fname;"
+        },
+        {
+          "sql": "SELECT Fname, Sex FROM Student WHERE StuID IN ( SELECT StuID FROM Has_Pet GROUP BY StuID HAVING COUNT(*) > 1 ) ORDER BY Fname;"
+        },
+        {
+          "sql": "SELECT Fname, Sex FROM Student WHERE StuID IN ( SELECT StuID FROM Has_Pet GROUP BY StuID HAVING COUNT(*) > 1 ) ORDER BY Fname;"
+        },
+        {
+          "sql": "SELECT Fname, Sex FROM Student WHERE StuID IN ( SELECT StuID FROM Has_Pet GROUP BY StuID HAVING COUNT(*) > 1 ) ORDER BY Fname;"
+        }
+      ]
+    },
+    {
+      "id": 83,
+      "question": "Find the last name of the student who has a cat that is age 3.",
+      "db_id": "pets_1",
+      "candidates": [
+        {
+          "sql": "SELECT Student.LName FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'cat' AND Pets.pet_age = 3;"
+        },
+        {
+          "sql": "SELECT Student.LName FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'cat' AND Pets.pet_age = 3;"
+        },
+        {
+          "sql": "SELECT Student.LName FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'cat' AND Pets.pet_age = 3;"
+        },
+        {
+          "sql": "SELECT Student.LName FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'cat' AND Pets.pet_age = 3;"
+        },
+        {
+          "sql": "SELECT Student.LName FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'cat' AND Pets.pet_age = 3;"
+        }
+      ]
+    },
+    {
+      "id": 84,
+      "question": "What is the last name of the student who has a cat that is 3 years old?",
+      "db_id": "pets_1",
+      "candidates": [
+        {
+          "sql": "SELECT Student.LName FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'cat' AND Pets.pet_age = 3;"
+        },
+        {
+          "sql": "SELECT Student.LName FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'cat' AND Pets.pet_age = 3;"
+        },
+        {
+          "sql": "SELECT Student.LName FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'cat' AND Pets.pet_age = 3;"
+        },
+        {
+          "sql": "SELECT Student.LName FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'cat' AND Pets.pet_age = 3;"
+        },
+        {
+          "sql": "SELECT Student.LName FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'cat' AND Pets.pet_age = 3;"
+        }
+      ]
+    },
+    {
+      "id": 85,
+      "question": "Find the average age of students who do not have any pet .",
+      "db_id": "pets_1",
+      "candidates": [
+        {
+          "sql": "SELECT AVG(Age) FROM Student WHERE StuID NOT IN (SELECT StuID FROM Has_Pet)"
+        },
+        {
+          "sql": "SELECT AVG(Age) FROM Student WHERE StuID NOT IN (SELECT StuID FROM Has_Pet)"
+        },
+        {
+          "sql": "SELECT AVG(Age) FROM Student WHERE StuID NOT IN (SELECT StuID FROM Has_Pet)"
+        },
+        {
+          "sql": "SELECT AVG(Age) FROM Student WHERE StuID NOT IN (SELECT StuID FROM Has_Pet)"
+        },
+        {
+          "sql": "SELECT AVG(Age) FROM Student WHERE StuID NOT IN (SELECT StuID FROM Has_Pet)"
+        }
+      ]
+    },
+    {
+      "id": 86,
+      "question": "What is the average age for all students who do not own any pets ?",
+      "db_id": "pets_1",
+      "candidates": [
+        {
+          "sql": "SELECT AVG(Age) FROM Student WHERE StuID NOT IN (SELECT StuID FROM Has_Pet)"
+        },
+        {
+          "sql": "SELECT AVG(Age) FROM Student WHERE StuID NOT IN (SELECT StuID FROM Has_Pet)"
+        },
+        {
+          "sql": "SELECT AVG(Age) FROM Student WHERE StuID NOT IN (SELECT StuID FROM Has_Pet)"
+        },
+        {
+          "sql": "SELECT AVG(Age) FROM Student WHERE StuID NOT IN (SELECT StuID FROM Has_Pet)"
+        },
+        {
+          "sql": "SELECT AVG(Age) FROM Student WHERE StuID NOT IN (SELECT StuID FROM Has_Pet)"
+        }
+      ]
+    },
+    {
+      "id": 87,
+      "question": "How many continents are there?",
+      "db_id": "car_1",
+      "candidates": [
+        {
+          "sql": "SELECT COUNT(DISTINCT Continent) FROM continents;"
+        },
+        {
+          "sql": "SELECT COUNT(DISTINCT Continent) FROM continents;"
+        },
+        {
+          "sql": "SELECT COUNT(DISTINCT Continent) FROM continents;"
+        },
+        {
+          "sql": "SELECT COUNT(DISTINCT Continent) FROM continents;"
+        },
+        {
+          "sql": "SELECT COUNT(DISTINCT Continent) FROM continents;"
+        }
+      ]
+    },
+    {
+      "id": 88,
+      "question": "What is the number of continents?",
+      "db_id": "car_1",
+      "candidates": [
+        {
+          "sql": "SELECT COUNT(*) FROM continents;"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM continents;"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM continents;"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM continents;"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM continents;"
+        }
+      ]
+    },
+    {
+      "id": 89,
+      "question": "How many countries does each continent have? List the continent id, continent name and the number of countries.",
+      "db_id": "car_1",
+      "candidates": [
+        {
+          "sql": "SELECT continents.ContId, continents.Continent, COUNT(countries.CountryId) FROM continents LEFT JOIN countries ON continents.Continent = countries.Continent GROUP BY continents.ContId, continents.Continent;"
+        },
+        {
+          "sql": "SELECT continents.ContId, continents.Continent, COUNT(countries.CountryId) FROM continents LEFT JOIN countries ON continents.Continent = countries.Continent GROUP BY continents.ContId, continents.Continent;"
+        },
+        {
+          "sql": "SELECT continents.ContId, continents.Continent, COUNT(countries.CountryId) FROM continents LEFT JOIN countries ON continents.Continent = countries.Continent GROUP BY continents.ContId, continents.Continent;"
+        },
+        {
+          "sql": "SELECT continents.ContId, continents.Continent, COUNT(countries.CountryId) FROM continents LEFT JOIN countries ON continents.Continent = countries.Continent GROUP BY continents.ContId, continents.Continent;"
+        },
+        {
+          "sql": "SELECT continents.ContId, continents.Continent, COUNT(countries.CountryId) FROM continents LEFT JOIN countries ON continents.Continent = countries.Continent GROUP BY continents.ContId, continents.Continent;"
+        }
+      ]
+    },
+    {
+      "id": 90,
+      "question": "For each continent, list its id, name, and how many countries it has?",
+      "db_id": "car_1",
+      "candidates": [
+        {
+          "sql": "SELECT continents.ContId, continents.Continent, COUNT(countries.CountryId) FROM continents LEFT JOIN countries ON continents.Continent = countries.Continent GROUP BY continents.ContId, continents.Continent;"
+        },
+        {
+          "sql": "SELECT continents.ContId, continents.Continent, COUNT(countries.CountryId) FROM continents LEFT JOIN countries ON continents.Continent = countries.Continent GROUP BY continents.ContId, continents.Continent;"
+        },
+        {
+          "sql": "SELECT continents.ContId, continents.Continent, COUNT(countries.CountryId) FROM continents LEFT JOIN countries ON continents.Continent = countries.Continent GROUP BY continents.ContId, continents.Continent;"
+        },
+        {
+          "sql": "SELECT continents.ContId, continents.Continent, COUNT(countries.CountryId) FROM continents LEFT JOIN countries ON continents.Continent = countries.Continent GROUP BY continents.ContId, continents.Continent;"
+        },
+        {
+          "sql": "SELECT continents.ContId, continents.Continent, COUNT(countries.CountryId) FROM continents LEFT JOIN countries ON continents.Continent = countries.Continent GROUP BY continents.ContId, continents.Continent;"
+        }
+      ]
+    },
+    {
+      "id": 91,
+      "question": "How many countries are listed?",
+      "db_id": "car_1",
+      "candidates": [
+        {
+          "sql": "SELECT COUNT(*) FROM countries;"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM countries;"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM countries;"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM countries;"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM countries;"
+        }
+      ]
+    },
+    {
+      "id": 92,
+      "question": "How many countries exist?",
+      "db_id": "car_1",
+      "candidates": [
+        {
+          "sql": "SELECT COUNT(*) FROM countries;"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM countries;"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM countries;"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM countries;"
+        },
+        {
+          "sql": "SELECT COUNT(*) FROM countries;"
+        }
+      ]
+    },
+    {
+      "id": 93,
+      "question": "How many models does each car maker produce? List maker full name, id and the number.",
+      "db_id": "car_1",
+      "candidates": [
+        {
+          "sql": "SELECT car_makers.FullName, car_makers.Id, COUNT(model_list.ModelId) AS NumberOfModels FROM car_makers JOIN model_list ON car_makers.Maker = model_list.Maker GROUP BY car_makers.Id, car_makers.FullName ORDER BY car_makers.Id;"
+        },
+        {
+          "sql": "SELECT car_makers.FullName, car_makers.Id, COUNT(model_list.ModelId) FROM car_makers JOIN model_list ON car_makers.Maker = model_list.Maker GROUP BY car_makers.Id, car_makers.FullName;"
+        },
+        {
+          "sql": "SELECT car_makers.FullName, car_makers.Id, COUNT(model_list.ModelId) FROM car_makers JOIN model_list ON car_makers.Maker = model_list.Maker GROUP BY car_makers.Id, car_makers.FullName;"
+        },
+        {
+          "sql": "SELECT car_makers.FullName, car_makers.Id, COUNT(model_list.ModelId) FROM car_makers JOIN model_list ON car_makers.Maker = model_list.Maker GROUP BY car_makers.Id, car_makers.FullName;"
+        },
+        {
+          "sql": "SELECT car_makers.FullName, car_makers.Id, COUNT(model_list.ModelId) FROM car_makers JOIN model_list ON car_makers.Maker = model_list.Maker GROUP BY car_makers.Id, car_makers.FullName;"
+        }
+      ]
+    },
+    {
+      "id": 94,
+      "question": "What is the full name of each car maker, along with its id and how many models it produces?",
+      "db_id": "car_1",
+      "candidates": [
+        {
+          "sql": "SELECT car_makers.Id, car_makers.FullName, COUNT(model_list.ModelId) AS ModelCount FROM car_makers LEFT JOIN model_list ON car_makers.Maker = model_list.Maker GROUP BY car_makers.Id, car_makers.FullName ORDER BY car_makers.Id;"
+        },
+        {
+          "sql": "SELECT car_makers.Id, car_makers.FullName, COUNT(model_list.ModelId) AS ModelCount FROM car_makers LEFT JOIN model_list ON car_makers.Maker = model_list.Maker GROUP BY car_makers.Id, car_makers.FullName ORDER BY car_makers.Id;"
+        },
+        {
+          "sql": "SELECT car_makers.Id, car_makers.FullName, COUNT(model_list.ModelId) AS ModelCount FROM car_makers LEFT JOIN model_list ON car_makers.Maker = model_list.Maker GROUP BY car_makers.Id, car_makers.FullName ORDER BY car_makers.Id;"
+        },
+        {
+          "sql": "SELECT car_makers.Id, car_makers.FullName, COUNT(model_list.ModelId) AS ModelCount FROM car_makers LEFT JOIN model_list ON car_makers.Maker = model_list.Maker GROUP BY car_makers.Id, car_makers.FullName ORDER BY car_makers.Id;"
+        },
+        {
+          "sql": "SELECT car_makers.Id, car_makers.FullName, COUNT(model_list.ModelId) AS ModelCount FROM car_makers LEFT JOIN model_list ON car_makers.Maker = model_list.Maker GROUP BY car_makers.Id, car_makers.FullName ORDER BY car_makers.Id;"
+        }
+      ]
+    },
+    {
+      "id": 95,
+      "question": "Which model of the car has the minimum horsepower?",
+      "db_id": "car_1",
+      "candidates": [
+        {
+          "sql": "SELECT model_list.Model FROM cars_data JOIN car_names ON cars_data.Id = car_names.MakeId JOIN model_list ON car_names.Model = model_list.Model ORDER BY cars_data.Horsepower ASC LIMIT 1;"
+        },
+        {
+          "sql": "SELECT model_list.Model FROM cars_data JOIN car_names ON cars_data.Id = car_names.MakeId JOIN model_list ON car_names.Model = model_list.Model ORDER BY cars_data.Horsepower ASC LIMIT 1;"
+        },
+        {
+          "sql": "SELECT model_list.Model FROM cars_data JOIN car_names ON cars_data.Id = car_names.MakeId JOIN model_list ON car_names.Model = model_list.Model ORDER BY cars_data.Horsepower ASC LIMIT 1;"
+        },
+        {
+          "sql": "SELECT model_list.Model FROM cars_data JOIN car_names ON cars_data.Id = car_names.MakeId JOIN model_list ON car_names.Model = model_list.Model ORDER BY cars_data.Horsepower ASC LIMIT 1;"
+        },
+        {
+          "sql": "SELECT model_list.Model FROM cars_data JOIN car_names ON cars_data.Id = car_names.MakeId JOIN model_list ON car_names.Model = model_list.Model ORDER BY cars_data.Horsepower ASC LIMIT 1;"
+        }
+      ]
+    },
+    {
+      "id": 96,
+      "question": "What is the model of the car with the smallest amount of horsepower?",
+      "db_id": "car_1",
+      "candidates": [
+        {
+          "sql": "SELECT model_list.Model FROM cars_data JOIN car_names ON cars_data.Id = car_names.MakeId JOIN model_list ON car_names.Model = model_list.Model ORDER BY cars_data.Horsepower ASC LIMIT 1;"
+        },
+        {
+          "sql": "SELECT model_list.Model FROM cars_data JOIN car_names ON cars_data.Id = car_names.MakeId JOIN model_list ON car_names.Model = model_list.Model ORDER BY cars_data.Horsepower ASC LIMIT 1;"
+        },
+        {
+          "sql": "SELECT model_list.Model FROM cars_data JOIN car_names ON cars_data.Id = car_names.MakeId JOIN model_list ON car_names.Model = model_list.Model ORDER BY cars_data.Horsepower ASC LIMIT 1;"
+        },
+        {
+          "sql": "SELECT model_list.Model FROM cars_data JOIN car_names ON cars_data.Id = car_names.MakeId JOIN model_list ON car_names.Model = model_list.Model ORDER BY cars_data.Horsepower ASC LIMIT 1;"
+        },
+        {
+          "sql": "SELECT model_list.Model FROM cars_data JOIN car_names ON cars_data.Id = car_names.MakeId JOIN model_list ON car_names.Model = model_list.Model ORDER BY cars_data.Horsepower ASC LIMIT 1;"
+        }
+      ]
+    },
+    {
+      "id": 97,
+      "question": "Find the model of the car whose weight is below the average weight.",
+      "db_id": "car_1",
+      "candidates": [
+        {
+          "sql": "SELECT model_list.Model FROM cars_data JOIN car_names ON cars_data.Id = car_names.MakeId JOIN model_list ON car_names.Model = model_list.Model WHERE cars_data.Weight < (SELECT AVG(Weight) FROM cars_data)"
+        },
+        {
+          "sql": "SELECT model_list.Model FROM cars_data JOIN car_names ON cars_data.Id = car_names.MakeId JOIN model_list ON car_names.Model = model_list.Model WHERE cars_data.Weight < (SELECT AVG(Weight) FROM cars_data);"
+        },
+        {
+          "sql": "SELECT model_list.Model FROM cars_data JOIN car_names ON cars_data.Id = car_names.MakeId JOIN model_list ON car_names.Model = model_list.Model WHERE cars_data.Weight < (SELECT AVG(Weight) FROM cars_data);"
+        },
+        {
+          "sql": "SELECT model_list.Model FROM cars_data JOIN car_names ON cars_data.Id = car_names.MakeId JOIN model_list ON car_names.Model = model_list.Model WHERE cars_data.Weight < (SELECT AVG(Weight) FROM cars_data);"
+        },
+        {
+          "sql": "SELECT model_list.Model FROM cars_data JOIN car_names ON cars_data.Id = car_names.MakeId JOIN model_list ON car_names.Model = model_list.Model WHERE cars_data.Weight < (SELECT AVG(Weight) FROM cars_data);"
+        }
+      ]
+    },
+    {
+      "id": 98,
+      "question": "What is the model for the car with a weight smaller than the average?",
+      "db_id": "car_1",
+      "candidates": [
+        {
+          "sql": "SELECT model_list.Model FROM cars_data JOIN car_names ON cars_data.Id = car_names.MakeId JOIN model_list ON car_names.Model = model_list.Model WHERE cars_data.Weight < (SELECT AVG(Weight) FROM cars_data);"
+        },
+        {
+          "sql": "SELECT model_list.Model FROM cars_data JOIN car_names ON cars_data.Id = car_names.MakeId JOIN model_list ON car_names.Model = model_list.Model WHERE cars_data.Weight < (SELECT AVG(Weight) FROM cars_data);"
+        },
+        {
+          "sql": "SELECT model_list.Model FROM cars_data JOIN car_names ON cars_data.Id = car_names.MakeId JOIN model_list ON car_names.Model = model_list.Model WHERE cars_data.Weight < (SELECT AVG(Weight) FROM cars_data);"
+        },
+        {
+          "sql": "SELECT model_list.Model FROM cars_data JOIN car_names ON cars_data.Id = car_names.MakeId JOIN model_list ON car_names.Model = model_list.Model WHERE cars_data.Weight < (SELECT AVG(Weight) FROM cars_data);"
+        },
+        {
+          "sql": "SELECT model_list.Model FROM cars_data JOIN car_names ON cars_data.Id = car_names.MakeId JOIN model_list ON car_names.Model = model_list.Model WHERE cars_data.Weight < (SELECT AVG(Weight) FROM cars_data);"
+        }
+      ]
+    },
+    {
+      "id": 99,
+      "question": "Find the name of the makers that produced some cars in the year of 1970?",
+      "db_id": "car_1",
+      "candidates": [
+        {
+          "sql": "SELECT DISTINCT car_makers.Maker FROM car_makers JOIN model_list ON car_makers.Id = model_list.Maker JOIN car_names ON model_list.Model = car_names.Model JOIN cars_data ON car_names.MakeId = cars_data.Id WHERE cars_data.Year = 1970;"
+        },
+        {
+          "sql": "SELECT DISTINCT car_makers.Maker FROM car_makers JOIN model_list ON car_makers.Id = model_list.Maker JOIN car_names ON model_list.Model = car_names.Model JOIN cars_data ON car_names.MakeId = cars_data.Id WHERE cars_data.Year = 1970;"
+        },
+        {
+          "sql": "SELECT DISTINCT car_makers.Maker FROM car_makers JOIN model_list ON car_makers.Id = model_list.Maker JOIN car_names ON model_list.Model = car_names.Model JOIN cars_data ON car_names.MakeId = cars_data.Id WHERE cars_data.Year = 1970;"
+        },
+        {
+          "sql": "SELECT DISTINCT car_makers.Maker FROM car_makers JOIN model_list ON car_makers.Id = model_list.Maker JOIN car_names ON model_list.Model = car_names.Model JOIN cars_data ON car_names.MakeId = cars_data.Id WHERE cars_data.Year = 1970;"
+        },
+        {
+          "sql": "SELECT DISTINCT car_makers.Maker FROM car_makers JOIN model_list ON car_makers.Id = model_list.Maker JOIN car_names ON model_list.Model = car_names.Model JOIN cars_data ON car_names.MakeId = cars_data.Id WHERE cars_data.Year = 1970;"
+        }
+      ]
+    }
+  ]
+}

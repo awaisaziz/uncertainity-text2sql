@@ -1,6 +1,6 @@
 import re
 import json
-from typing import Any, Optional
+from typing import Any, List
 
 
 FENCE_PATTERN = re.compile(r"```sql\s*(.*?)```", re.IGNORECASE | re.DOTALL)
@@ -11,20 +11,16 @@ JSON_ARRAY_PATTERN = re.compile(
     re.DOTALL
 )
 
-def clean_json_array(text: str) -> Optional[Any]:
-    """
-    Extracts a clean JSON array from messy LLM output.
+def clean_json_array(text: str) -> List[Any]:
+    """Return a parsed JSON array from messy LLM output.
 
-    Handles cases:
-    - ```json [ {...}, {...} ] ```
-    - json [ {...} ]
-    - Output: Here are results -> [ {...} ]
-    - Extra newlines, spaces, quotes.
-
-    Returns the parsed Python list, or None if not found.
+    This helper is intentionally defensive: instead of raising, it returns an
+    empty list when parsing fails. It normalises common formats such as fenced
+    markdown blocks, ``json [ ... ]`` prefixes, or loose arrays embedded in
+    prose.
     """
     if not text:
-        return None
+        return []
 
     raw = text.strip()
 
@@ -45,17 +41,20 @@ def clean_json_array(text: str) -> Optional[Any]:
         start = raw.find("[")
         end = raw.rfind("]")
         if start == -1 or end == -1:
-            return None
-        json_str = raw[start:end + 1].strip()
+            return []
+        json_str = raw[start : end + 1].strip()
 
-    # 4. Attempt to parse the JSON
-    try:
-        parsed = json.loads(json_str)
-        if isinstance(parsed, list):
-            return parsed
-        return [parsed]  # If it's a dict, wrap it
-    except json.JSONDecodeError:
-        return None
+    # 4. Attempt to parse the JSON with a couple of lenient passes
+    for candidate in (json_str, json_str.replace("'", '"')):
+        try:
+            parsed = json.loads(candidate)
+            if isinstance(parsed, list):
+                return parsed
+            return [parsed]  # If it's a dict or scalar, wrap it
+        except json.JSONDecodeError:
+            continue
+
+    return []
 
 def clean_sql_text(text: str) -> str:
     """Extract the SQL statement from model output."""

@@ -9,6 +9,9 @@ __pycache__/
 # Dataset
 spider_data/
 
+# Extracted_sql for evaluation files and reranked result as they are re-producible
+extracted_sql_for_evaluation/
+
 # Distribution / packaging
 .Python
 build/

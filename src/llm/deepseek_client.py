@@ -55,11 +55,11 @@ class DeepSeekChatLLM:
             temperature=self.temperature,
         )
 
-        sql_text = self._extract_text(resp)
+        sql_text = self.extract_text(resp)
         return sql_text
 
     @staticmethod
-    def _extract_text(completion: ChatCompletion) -> str:
+    def extract_text(completion: ChatCompletion) -> str:
         """Extract the textual content from the chat completion."""
 
         message = completion.choices[0].message

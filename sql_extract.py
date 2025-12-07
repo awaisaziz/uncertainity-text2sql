@@ -40,16 +40,20 @@ def extract_sac_sql(data, output_dir, base_name):
     - selected_sql_softmax
     - selected_sql_gmm
     - selected_sql_hybrid
+    - selected_sql_robust
 
     Output files:
     {base_name}_sql_softmax.txt
     {base_name}_sql_gmm.txt
     {base_name}_sql_hybrid.txt
+    {base_name}_sql_robust.txt
     """
     softmax_list = []
     gmm_list = []
     hybrid_list = []
-
+    robust_list = []
+    trainer_list = []
+    
     for item in data.get("generated", []):
         if item.get("selected_sql_softmax"):
             softmax_list.append(item["selected_sql_softmax"])
@@ -57,6 +61,10 @@ def extract_sac_sql(data, output_dir, base_name):
             gmm_list.append(item["selected_sql_gmm"])
         if item.get("selected_sql_hybrid"):
             hybrid_list.append(item["selected_sql_hybrid"])
+        if item.get("selected_sql_robust"):
+            robust_list.append(item["selected_sql_robust"])
+        if item.get("selected_sql_trainer"):
+            trainer_list.append(item["selected_sql_trainer"])
 
     os.makedirs(output_dir, exist_ok=True)
 
@@ -83,6 +91,22 @@ def extract_sac_sql(data, output_dir, base_name):
             for sql in hybrid_list:
                 f.write(sql + "\n")
         print(f"[sac] Hybrid SQL -> {path_hybrid}")
+    
+    # Write Robust file (same as Hybrid in this context)
+    if robust_list:
+        path_robust = os.path.join(output_dir, f"{base_name}_sql_robust.sql")
+        with open(path_robust, "w") as f:
+            for sql in robust_list:
+                f.write(sql + "\n")
+        print(f"[sac] Robust SQL -> {path_robust}")
+    
+    # Write Trainer file
+    if trainer_list:
+        path_trainer = os.path.join(output_dir, f"{base_name}_sql_trainer.sql")
+        with open(path_trainer, "w") as f:
+            for sql in trainer_list:
+                f.write(sql + "\n")
+        print(f"[sac] Trainer SQL -> {path_trainer}")
 
 
 def main():

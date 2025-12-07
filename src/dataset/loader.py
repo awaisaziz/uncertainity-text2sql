@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Dict, Iterable, List, Tuple
 
 
-def _build_table_index(tables_json: List[Dict]) -> Dict[str, Dict]:
+def build_table_index(tables_json: List[Dict]) -> Dict[str, Dict]:
     index: Dict[str, Dict] = {}
     for entry in tables_json:
         table_names = entry.get("table_names_original") or entry.get("table_names")
@@ -15,7 +15,7 @@ def _build_table_index(tables_json: List[Dict]) -> Dict[str, Dict]:
     return index
 
 
-def _table_schema_to_string(table_names: List[str], column_names: List[Tuple[int, str]]) -> str:
+def table_schema_to_string(table_names: List[str], column_names: List[Tuple[int, str]]) -> str:
     schema_lines: List[str] = []
     for table_id, table_name in enumerate(table_names):
         columns = [name for idx, name in column_names if idx == table_id]
@@ -33,14 +33,14 @@ def load_spider_split(dataset_path: Path) -> List[Dict]:
     with tables_path.open("r", encoding="utf-8") as f:
         tables_data = json.load(f)
 
-    table_index = _build_table_index(tables_data)
+    table_index = build_table_index(tables_data)
 
     records: List[Dict] = []
     for item in dev_data:
         db_id = item["db_id"]
         question = item["question"]
         schema_meta = table_index.get(db_id, {})
-        schema = _table_schema_to_string(
+        schema = table_schema_to_string(
             schema_meta.get("table_names", []), schema_meta.get("column_names", [])
         )
         records.append(
