@@ -137,6 +137,32 @@ python evaluation.py --gold spider_data/dev_gold.sql --db spider_data/database -
 
 The script will create a temporary `.sql` file, run `spider_data/evaluate.py`, and print the reported metrics.
 
+## Experimental Results (deepseek-chat as SQL Generator)
+
+In all the experiments, the **deepseek-chat** model is used as the underlying SQL generator. Different values of **k** indicate how many SQL candidates are sampled per query.
+
+* **k = 1** serves as the **baseline**, representing the model’s default single output prediction without reranking or uncertainty modelling.
+* For **k > 1**, various reranking methods are applied to select the final SQL.
+
+The table below reports execution accuracy and exact match scores using **first 100 queries sampled from the Spider 1.0 `dev.json` file**.
+
+### Performance Comparison Across Reranking Methods
+
+| **Method (k)**       | **Execution Acc (%)** | **Exact Match (%)** |
+| -------------------- | --------------------- | ------------------- |
+| **Baseline (k = 1)** | 65                    | 45                  |
+| **GMM (k = 4)**      | 53                    | 43                  |
+| **Hybrid (k = 4)**   | 60                    | 41                  |
+| **Robust (k = 4)**   | 69                    | 46                  |
+| **GMM (k = 5)**      | 60                    | 48                  |
+| **Hybrid (k = 5)**   | 60                    | 48                  |
+| **Robust (k = 5)**   | 60                    | 45                  |
+| **GMM (k = 8)**      | 62                    | 45                  |
+| **Hybrid (k = 8)**   | 60                    | 43                  |
+| **Robust (k = 8)**   | **71**                | **55**              |
+
+The **best-performing** method for each setting is shown in **bold**.
+
 ## Dataset Download
 
 To run this project, you need the **Spider 1.0** dataset, which provides the natural language questions, gold SQL queries, and database files used for evaluation.
