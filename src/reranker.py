@@ -440,7 +440,7 @@ def run_reranking(
         1 for e in reranked_entries if e["selection_method"] == "execution_consensus"
     )
     logger.info(
-        f"✅ EXECUTION WINS: {exec_wins}/{len(reranked_entries)} "
+        f"EXECUTION WINS: {exec_wins}/{len(reranked_entries)} "
         f"({exec_wins/len(reranked_entries)*100:.1f}%)"
     )
     logger.info("Reranked output written to %s", output_path)
