@@ -19,15 +19,15 @@ import torch
 # -----------------------------
 # Hyperparameters
 # -----------------------------
-TEMPERATURE = 9.0
-MIN_EXECUTION_TRUST = 0.7   # >= 30% agreement to trust execution
+TEMPERATURE = 11.0
+MIN_EXECUTION_TRUST = 0.3   # >= 30% agreement to trust execution
 
 W_QSS = 0.7
 W_CSA = 0.3
 
 HYBRID_SOFT = 0.3
-HYBRID_GMM = 0.2
-HYBRID_EXEC = 0.5
+HYBRID_GMM = 0.3
+HYBRID_EXEC = 0.4
 
 
 # -----------------------------
