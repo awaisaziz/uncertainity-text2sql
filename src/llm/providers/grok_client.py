@@ -26,7 +26,7 @@ class GrokChatLLM:
             raise EnvironmentError("GROK_API_KEY environment variable is required for Grok access.")
 
         # Grok provides an OpenAI-compatible API hosted at this base URL.
-        self.client = OpenAI(api_key=self.api_key, base_url="https://api.x.ai")
+        self.client = OpenAI(api_key=self.api_key, base_url="https://api.x.ai/v1")
         self.max_tokens = max_tokens
         self.temperature = temperature
 
