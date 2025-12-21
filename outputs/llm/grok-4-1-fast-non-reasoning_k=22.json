@@ -1,0 +1,17 @@
+{
+  "dataset_path": "spider_data",
+  "default_provider": "grok",
+  "default_model": "grok-4-1-fast-non-reasoning",
+  "mode": "generate",
+  "num_sample": 1,
+  "num_query": 1,
+  "max_tokens": 6000,
+  "generated": [
+    {
+      "id": 0,
+      "question": "How many singers do we have?",
+      "db_id": "concert_singer",
+      "candidates": []
+    }
+  ]
+}

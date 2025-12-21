@@ -5,7 +5,7 @@ from pathlib import Path
 
 from src.dataset.loader import load_spider_split
 from src.generator import PredictionGenerator
-from src.llm import DeepSeekChatLLM
+from src.llm.router import create_llm
 from src.reranker import run_reranking
 from src.utils.logger import get_logger
 
@@ -27,6 +27,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output_rerank", default=None)
     parser.add_argument("--db_root", default="spider_data/database")
     parser.add_argument("--config", default="config/config.json", help="Path to config JSON file.")
+    parser.add_argument("--provider", default=None, help="LLM provider name (deepseek, grok, openai).")
+    parser.add_argument("--model", default=None, help="LLM model name for the chosen provider.")
     return parser.parse_args()
 
 
@@ -47,18 +49,22 @@ def main() -> None:
         or f"outputs/reranked/{output_llm.stem}_reranked.json"
     )
     db_root = args.db_root or config.get("db_root", "spider_data/database")
+    provider = args.provider or config.get("default_provider", "deepseek")
+    model = args.model or config.get("default_model", "deepseek-chat")
 
     log_dir = Path("logs")
     log_name = f"run_{datetime.utcnow().strftime('%Y%m%dT%H%M%SZ')}.log"
     logger = get_logger(log_dir=log_dir, log_name=log_name)
 
     logger.info(
-        "Configuration - mode: %s | dataset: %s | num_sample: %s | num_query: %s | max_tokens: %s | output_llm: %s | output_rerank: %s",
+        "Configuration - mode: %s | dataset: %s | num_sample: %s | num_query: %s | max_tokens: %s | provider: %s | model: %s | output_llm: %s | output_rerank: %s",
         mode,
         dataset_path,
         num_sample,
         num_query,
         max_tokens,
+        provider,
+        model,
         output_llm,
         output_rerank,
     )
@@ -67,7 +73,7 @@ def main() -> None:
         records = load_spider_split(dataset_path)
         logger.info("Loaded %d questions from %s", len(records), dataset_path)
 
-        llm = DeepSeekChatLLM(max_tokens=max_tokens)
+        llm = create_llm(provider=provider, model=model, max_tokens=max_tokens)
         generator = PredictionGenerator(
             llm=llm,
             num_query=num_query,

@@ -1,4 +1,4 @@
-"""SQL generation pipeline using the DeepSeek chat model."""
+"""SQL generation pipeline using pluggable LLM providers."""
 
 import json
 from dataclasses import dataclass
@@ -9,7 +9,7 @@ from typing import Dict, Iterable, List
 from dotenv import load_dotenv
 from tqdm import tqdm
 
-from src.llm.deepseek_client import DeepSeekChatLLM
+from src.llm.router import SQLGenerator
 from src.prompts.zero_shot import build_multi_sql_prompt
 from src.utils.clean_text import clean_json_array
 
@@ -27,7 +27,7 @@ class PredictionGenerator:
 
     def __init__(
         self,
-        llm: DeepSeekChatLLM,
+        llm: SQLGenerator,
         *,
         num_query: int,
         max_tokens: int,
@@ -41,6 +41,8 @@ class PredictionGenerator:
         self.delay = delay
         self.num_sample = num_sample
         self.logger = logger
+        self.provider = getattr(llm, "provider", "unknown")
+        self.model = getattr(llm, "model", "unknown")
 
     def generate(self, records: Iterable[Dict], output_file: Path, config: Dict) -> None:
         """Generate SQL predictions and write them to ``output_file``."""
@@ -87,8 +89,8 @@ class PredictionGenerator:
 
         output_payload = {
             "dataset_path": str(Path(config["dataset_path"])),
-            "default_provider": "deepseek",
-            "default_model": "deepseek-chat",
+            "default_provider": self.provider,
+            "default_model": self.model,
             "mode": "generate",
             "num_sample": self.num_sample,
             "num_query": self.num_query,

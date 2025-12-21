@@ -10,7 +10,7 @@ The system stores all generated candidates, computes detailed uncertainty scores
 - `config/config.json` – default runtime configuration (paths, provider/model, delay, mode, and output targets).
 - `src/dataset/loader.py` – helpers to load `dev.json` and `tables.json` and pair questions with schemas.
 - `src/prompts/` – prompt builders (currently zero-shot with system/user separation).
-- `src/llm/` – DeepSeek Chat client (loads `.env` for the API key).
+- `src/llm/` – LLM router plus provider clients (DeepSeek, Grok, OpenAI).
 - `src/generator.py` – runs the generation loop, cleaning outputs and writing JSON.
 - `src/utils/` – logging setup and SQL text cleaning helpers.
 - `logs/` – log files (created at runtime).
@@ -19,8 +19,10 @@ The system stores all generated candidates, computes detailed uncertainty scores
 ## Prerequisites
 - Python 3.10+
 - Spider dataset available locally (expects `dev.json` and `tables.json` inside the dataset folder).
-- Environment variable for DeepSeek (place in a `.env` loaded by your shell):
-  - `DEEPSEEK_API_KEY`
+- Environment variables for providers (place in a `.env` loaded by your shell):
+  - `DEEPSEEK_API_KEY` (DeepSeek)
+  - `GROK_API_KEY` (xAI Grok)
+  - `OPENAI_API_KEY` (OpenAI ChatGPT)
 
 ## Configuration
 Defaults live in `config/config.json`:
@@ -57,9 +59,16 @@ You can override any of these via CLI flags.
    ```
 
 ## Running
-From the repository root:
+From the repository root, choose a provider/model pair (defaults are DeepSeek/deepseek-chat):
 ```bash
-python main.py --mode generate --dataset_path spider_data/ --num_sample 100 --num_query 1 --max_tokens 6000 --output_llm outputs/llm/predictions_deepseek.json
+# DeepSeek (default)
+python main.py --mode generate --provider deepseek --model deepseek-chat --dataset_path spider_data/ --num_sample 100 --num_query 1 --max_tokens 6000 --output_llm outputs/llm/predictions_deepseek.json
+
+# Grok
+python main.py --mode generate --provider grok --model grok-3-mini --dataset_path spider_data/ --num_sample 100 --num_query 1 --max_tokens 6000 --output_llm outputs/llm/predictions_grok.json
+
+# OpenAI ChatGPT
+python main.py --mode generate --provider openai --model gpt-4o-mini --dataset_path spider_data/ --num_sample 100 --num_query 1 --max_tokens 6000 --output_llm outputs/llm/predictions_openai.json
 ```
 
 Logs will be written to `logs/run_<timestamp>.log`, with a single file capturing the full session. The generation output contains entries shaped like:
@@ -188,4 +197,3 @@ Make sure you set your config properly:
   "dataset_path": "./spider_data/"
 }
 ```
-
