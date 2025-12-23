@@ -38,7 +38,8 @@ class OpenAIChatLLM:
                 {"role": "system", "content": SYSTEM_PROMPT},
                 {"role": "user", "content": prompt},
             ],
-            max_tokens=self.max_tokens,
+            # Newer OpenAI models require `max_completion_tokens` instead of `max_tokens`.
+            max_completion_tokens=self.max_tokens,
             temperature=self.temperature,
         )
 

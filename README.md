@@ -62,13 +62,13 @@ You can override any of these via CLI flags.
 From the repository root, choose a provider/model pair (defaults are DeepSeek/deepseek-chat):
 ```bash
 # DeepSeek (default)
-python main.py --mode generate --provider deepseek --model deepseek-chat --dataset_path spider_data/ --num_sample 100 --num_query 1 --max_tokens 6000 --output_llm outputs/llm/predictions_deepseek.json
+python main.py --mode generate --provider deepseek --model deepseek-chat --dataset_path spider_data/ --num_sample 100 --num_query 1 --max_tokens 6000 --output_llm outputs/llm/deepseek_chat_k=1.json
 
 # Grok
-python main.py --mode generate --provider grok --model grok-3-mini --dataset_path spider_data/ --num_sample 100 --num_query 1 --max_tokens 6000 --output_llm outputs/llm/predictions_grok.json
+python main.py --mode generate --provider grok --model grok-4-1-fast-non-reasoning --dataset_path spider_data/ --num_sample 100 --num_query 1 --max_tokens 6000 --output_llm outputs/llm/grok-4-1-fast-non-reasoning_k=1.json
 
 # OpenAI ChatGPT
-python main.py --mode generate --provider openai --model gpt-4o-mini --dataset_path spider_data/ --num_sample 100 --num_query 1 --max_tokens 6000 --output_llm outputs/llm/predictions_openai.json
+python main.py --mode generate --provider openai --model gpt-5-mini --dataset_path spider_data/ --num_sample 100 --num_query 1 --max_tokens 6000 --output_llm outputs/llm/gpt-5-mini_k=1.json
 ```
 
 Logs will be written to `logs/run_<timestamp>.log`, with a single file capturing the full session. The generation output contains entries shaped like:
