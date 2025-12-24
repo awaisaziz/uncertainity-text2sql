@@ -20,11 +20,11 @@ SELECT Name, Capacity FROM stadium WHERE Average = (SELECT MAX(Average) FROM sta
 SELECT Name, Capacity FROM stadium WHERE Average = (SELECT MAX(Average) FROM stadium)
 SELECT count(*) FROM concert WHERE Year = 2014 OR Year = 2015
 SELECT count(*) FROM concert WHERE Year = 2014 OR Year = 2015
-SELECT T1.Name ,  count(T2.concert_ID) FROM stadium AS T1 JOIN concert AS T2 ON T1.Stadium_ID  =  T2.Stadium_ID GROUP BY T1.Stadium_ID ,  T1.Name
-SELECT T1.Stadium_ID ,  T1.Location ,  T1.Name ,  T1.Capacity ,  T1.Highest ,  T1.Lowest ,  T1.Average ,  count(T2.concert_ID) FROM stadium AS T1 LEFT JOIN concert AS T2 ON T1.Stadium_ID  =  T2.Stadium_ID GROUP BY T1.Stadium_ID ,  T1.Location ,  T1.Name ,  T1.Capacity ,  T1.Highest ,  T1.Lowest ,  T1.Average
+SELECT T1.Name ,  count(*) FROM stadium AS T1 JOIN concert AS T2 ON T1.Stadium_ID  =  T2.Stadium_ID GROUP BY T1.Name ,  T1.Stadium_ID
+SELECT T1.Stadium_ID ,  T1.Location ,  T1.Name ,  T1.Capacity ,  T1.Highest ,  T1.Lowest ,  T1.Average ,  count(T2.Stadium_ID) FROM stadium AS T1 LEFT JOIN concert AS T2 ON T1.Stadium_ID  =  T2.Stadium_ID GROUP BY T1.Stadium_ID ,  T1.Location ,  T1.Name ,  T1.Capacity ,  T1.Highest ,  T1.Lowest ,  T1.Average
 SELECT T1.Name ,  T1.Capacity FROM stadium AS T1 JOIN concert AS T2 ON T1.Stadium_ID  =  T2.Stadium_ID WHERE T2.Year  >=  2014 GROUP BY T1.Stadium_ID ,  T1.Name ,  T1.Capacity ORDER BY count(*) DESC LIMIT 1
 SELECT Name, Capacity FROM stadium WHERE Stadium_ID = (SELECT Stadium_ID FROM concert WHERE Year > 2013 GROUP BY Stadium_ID ORDER BY count(*) DESC LIMIT 1)
-SELECT Year FROM (SELECT Year, count(*) AS cnt FROM concert GROUP BY Year) AS T1 WHERE cnt = (SELECT max(cnt) FROM (SELECT count(*) AS cnt FROM concert GROUP BY Year) AS T2)
+SELECT Year FROM concert GROUP BY Year HAVING count(*) = (SELECT max(cnt) FROM (SELECT Year, count(*) AS cnt FROM concert GROUP BY Year) AS T1)
 SELECT Year FROM (SELECT Year ,  count(*) AS cnt FROM concert GROUP BY Year) AS T1 WHERE cnt  =  (SELECT max(cnt) FROM (SELECT count(*) AS cnt FROM concert GROUP BY Year) AS T2)
 SELECT Name FROM stadium WHERE Stadium_ID NOT IN (SELECT Stadium_ID FROM concert)
 SELECT Name FROM stadium WHERE Stadium_ID NOT IN (SELECT Stadium_ID FROM concert)
@@ -45,7 +45,7 @@ SELECT count(*) FROM concert WHERE Stadium_ID = (SELECT Stadium_ID FROM stadium 
 SELECT count(*) FROM concert WHERE Stadium_ID = (SELECT Stadium_ID FROM stadium ORDER BY Capacity DESC LIMIT 1)
 SELECT count(*) FROM Pets WHERE weight > 10
 SELECT count(*) FROM Pets WHERE weight > 10
-SELECT weight FROM Pets WHERE PetType = 'dog' AND pet_age = (SELECT min(pet_age) FROM Pets WHERE PetType = 'dog')
+SELECT weight FROM Pets WHERE PetType = 'dog' AND pet_age = (SELECT pet_age FROM Pets WHERE PetType = 'dog' ORDER BY pet_age LIMIT 1)
 SELECT weight FROM Pets WHERE PetType = 'dog' AND pet_age = (SELECT min(pet_age) FROM Pets WHERE PetType = 'dog')
 SELECT PetType, MAX(weight) FROM Pets GROUP BY PetType
 SELECT PetType, max(weight) FROM Pets GROUP BY PetType
@@ -87,8 +87,8 @@ SELECT avg(Age) FROM Student WHERE StuID NOT IN (SELECT StuID FROM Has_Pet)
 SELECT avg(Age) FROM Student WHERE StuID NOT IN (SELECT StuID FROM Has_Pet)
 SELECT count(*) FROM continents
 SELECT count(*) FROM continents
-SELECT ContId ,  Continent ,  (SELECT count(*) FROM countries WHERE countries.Continent  =  continents.Continent) FROM continents
-SELECT T1.ContId ,  T1.Continent ,  (SELECT count(*) FROM countries AS T2 WHERE T2.Continent  =  T1.Continent) FROM continents AS T1
+SELECT ContId ,  Continent ,  (SELECT count(CountryId) FROM countries WHERE Continent  =  T1.Continent) FROM continents AS T1
+SELECT ContId ,  Continent ,  (SELECT count(CountryId) FROM countries WHERE Continent  =  continents.Continent) FROM continents
 SELECT count(*) FROM countries
 SELECT count(*) FROM countries
 SELECT T1.FullName ,  T1.Id ,  count(*) FROM car_makers AS T1 JOIN model_list AS T2 ON T1.Id  =  T2.Maker GROUP BY T1.FullName ,  T1.Id

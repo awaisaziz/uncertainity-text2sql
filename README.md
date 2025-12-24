@@ -25,7 +25,7 @@ The system stores all generated candidates, computes detailed uncertainty scores
   - `OPENAI_API_KEY` (OpenAI ChatGPT)
 
 ## Configuration
-Defaults live in `config/config.json`:
+Defaults configuration live in `config/config.json`:
 ```json
 {
   "dataset_path": "./spider_data/",
@@ -36,14 +36,15 @@ Defaults live in `config/config.json`:
   "max_tokens": 2048,
   "request_delay": 0.0,
   "mode": "generate",
-  "output_llm": "outputs/llm/deepseek_chat_one_candidate_query.json",
-  "output_rerank": "outputs/reranked/deepseek_chat_one_candidate_query_reranked.json"
+  "output_llm": "outputs/llm/deepseek_chat_k=1.json",
+  "output_rerank": "outputs/reranked/deepseek_chat_k=1_reranked.json"
 }
 ```
 ## Notes
 - The `num_query` setting controls how many SQL candidates are requested in a single LLM response. The prompt expects the model to return a JSON array with exactly this many `sql` entries.
 - The `request_delay` setting helps avoid rate limits when using real APIs.
 - `mode` controls whether the CLI runs online generation (`generate`) or offline reranking (`rerank`).
+- Can use provider `grok` with the model `grok-4-1-fast-non-reasoning`
 
 You can override any of these via CLI flags.
 
@@ -114,7 +115,7 @@ Format: [{"sql": "query1"}, {"sql": "query2"}, ...]
 After collecting LLM outputs, run the semantic consensus reranker:
 
 ```bash
-python main.py --mode rerank --output_llm outputs/llm/predictions_deepseek.json --output_rerank outputs/reranked/predictions_deepseek_reranked.json
+python main.py --mode rerank --output_llm outputs/llm/deepseek_chat_k=1.json --output_rerank outputs/reranked/deepseek_chat_k=1_reranked.json
 ```
 
 The reranker computes cosine similarity, consensus, softmax probabilities, GMM posteriors, semantic entropy, GMM entropy, and three strategies (softmax-only, GMM-only, hybrid). It writes both the specified reranked file and a convenience copy named `reranked_output.json` inside the reranked output directory.
@@ -124,7 +125,7 @@ The reranker computes cosine similarity, consensus, softmax probabilities, GMM p
 Use `sql_extract.py` to extract all the required sql queries from the output predicted files and store only the sql queries in a separate folder. Later this file will be used for evaluation to report the results. There are 2 modes `simple` means take the first sql query from the candidate and second `sac` is to take the best sql from 3 different techniques softmax, GMM and hybrid.
 
 ```bash
-python sql_extract.py --input_path outputs/llm/deepseek_chat_one_candidate_query.json --output_dir extracted_sql_for_evaluation/ --mode simple
+python sql_extract.py --input_path outputs/llm/deepseek_chat_k=1.json --output_dir extracted_sql_for_evaluation/ --mode simple
 ```
 
 and for using the sac mode we have the following prompt
