@@ -55,12 +55,12 @@ SELECT count(T1.PetID) FROM Pets AS T1, Has_Pet AS T2, Student AS T3 WHERE T1.Pe
 SELECT count(*) FROM Pets WHERE PetType = 'dog' AND PetID IN (SELECT PetID FROM Has_Pet WHERE StuID IN (SELECT StuID FROM Student WHERE Sex = 'F'))
 SELECT count(DISTINCT PetType) FROM Pets
 SELECT count(DISTINCT PetType) FROM Pets
-SELECT T1.Fname FROM Student AS T1 JOIN Has_Pet AS T2 ON T1.StuID = T2.StuID WHERE T2.PetID IN (SELECT T3.PetID FROM Pets AS T3 WHERE T3.PetType = 'cat' OR T3.PetType = 'dog')
+SELECT T1.Fname FROM Student AS T1 JOIN Has_Pet AS T2 ON T1.StuID = T2.StuID JOIN Pets AS T3 ON T2.PetID = T3.PetID WHERE T3.PetType = 'cat' UNION SELECT T1.Fname FROM Student AS T1 JOIN Has_Pet AS T2 ON T1.StuID = T2.StuID JOIN Pets AS T3 ON T2.PetID = T3.PetID WHERE T3.PetType = 'dog'
 SELECT T1.Fname FROM Student AS T1 JOIN Has_Pet AS T2 ON T1.StuID = T2.StuID JOIN Pets AS T3 ON T2.PetID = T3.PetID WHERE T3.PetType = 'cat' UNION SELECT T1.Fname FROM Student AS T1 JOIN Has_Pet AS T2 ON T1.StuID = T2.StuID JOIN Pets AS T3 ON T2.PetID = T3.PetID WHERE T3.PetType = 'dog'
 SELECT T1.Fname FROM Student AS T1 JOIN Has_Pet AS T2 ON T1.StuID = T2.StuID JOIN Pets AS T3 ON T2.PetID = T3.PetID WHERE T3.PetType IN ('cat', 'dog') GROUP BY T1.StuID, T1.Fname HAVING COUNT(DISTINCT T3.PetType) = 2
 SELECT T1.Fname FROM Student AS T1 JOIN Has_Pet AS T2 ON T1.StuID = T2.StuID JOIN Pets AS T3 ON T2.PetID = T3.PetID WHERE T3.PetType = 'cat' AND T1.StuID IN (SELECT T2.StuID FROM Has_Pet AS T2 JOIN Pets AS T3 ON T2.PetID = T3.PetID WHERE T3.PetType = 'dog')
 SELECT DISTINCT T1.Major ,  T1.Age FROM Student AS T1 WHERE T1.StuID NOT IN (SELECT T2.StuID FROM Has_Pet AS T2 JOIN Pets AS T3 ON T2.PetID  =  T3.PetID WHERE T3.PetType  =  'cat')
-SELECT T1.Major ,  T1.Age FROM Student AS T1 WHERE T1.StuID NOT IN (SELECT T2.StuID FROM Has_Pet AS T2 JOIN Pets AS T3 ON T2.PetID  =  T3.PetID WHERE T3.PetType  =  'cat')
+SELECT T1.Major ,  T1.Age FROM Student AS T1 EXCEPT SELECT T2.Major ,  T2.Age FROM Student AS T2 JOIN Has_Pet AS T3 ON T2.StuID  =  T3.StuID JOIN Pets AS T4 ON T3.PetID  =  T4.PetID WHERE T4.PetType  =  'cat'
 SELECT StuID FROM Student EXCEPT SELECT StuID FROM Has_Pet JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE PetType = 'cat'
 SELECT StuID FROM Student WHERE StuID NOT IN (SELECT DISTINCT StuID FROM Has_Pet WHERE PetID IN (SELECT PetID FROM Pets WHERE PetType = 'cat'))
 SELECT DISTINCT T1.Fname ,  T1.Age FROM Student AS T1 JOIN Has_Pet AS T2 ON T1.StuID  =  T2.StuID JOIN Pets AS T3 ON T2.PetID  =  T3.PetID WHERE T3.PetType  =  'dog' AND T1.StuID NOT IN (SELECT T4.StuID FROM Has_Pet AS T4 JOIN Pets AS T5 ON T4.PetID  =  T5.PetID WHERE T5.PetType  =  'cat')
@@ -90,7 +90,7 @@ SELECT count(Continent) FROM continents
 SELECT ContId ,  Continent ,  count(CountryId) FROM continents ,  countries WHERE continents.Continent  =  countries.Continent GROUP BY ContId ,  Continent
 SELECT ContId ,  Continent ,  count(CountryId) FROM continents ,  countries WHERE continents.Continent  =  countries.Continent GROUP BY ContId ,  continents.Continent
 SELECT count(CountryName) FROM countries
-SELECT count(CountryName) FROM countries
+SELECT count(*) FROM countries
 SELECT T1.FullName ,  T1.Id ,  count(*) FROM model_list AS T2 JOIN car_makers AS T1 ON T2.Maker  =  T1.Id GROUP BY T1.Id ,  T1.FullName
 SELECT T1.Id ,  T1.FullName ,  count(T2.ModelId) FROM car_makers AS T1 JOIN model_list AS T2 ON T1.Id  =  T2.Maker GROUP BY T1.Id ,  T1.FullName
 SELECT T1.Model FROM model_list AS T1 JOIN cars_data AS T2 ON T1.ModelId  =  T2.Id GROUP BY T1.Model HAVING T2.Horsepower  =  (SELECT min(Horsepower) FROM cars_data)

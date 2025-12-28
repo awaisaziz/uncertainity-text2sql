@@ -14,20 +14,20 @@ import numpy as np
 from scipy.special import softmax as scipy_softmax
 from sentence_transformers import SentenceTransformer
 from sklearn.mixture import GaussianMixture
-import torch
+import torch, time
 
 # -----------------------------
 # Hyperparameters
 # -----------------------------
-TEMPERATURE = 11.0
-MIN_EXECUTION_TRUST = 0.3   # >= 30% agreement to trust execution
+TEMPERATURE = 10.0
+MIN_EXECUTION_TRUST = 0.7   # >= 70% agreement to trust execution
 
 W_QSS = 0.7
 W_CSA = 0.3
 
-HYBRID_SOFT = 0.3
-HYBRID_GMM = 0.3
-HYBRID_EXEC = 0.4
+HYBRID_SOFT = 0.4
+HYBRID_GMM = 0.1
+HYBRID_EXEC = 0.5
 
 
 # -----------------------------
@@ -45,16 +45,32 @@ def entropy(probs: Sequence[float]) -> float:
 
 
 def execute_semantic_key(sql: str, db_id: str, db_root="spider/database") -> tuple:
-    try:
         db = f"{db_root}/{db_id}/{db_id}.sqlite"
-        conn = sqlite3.connect(db)
-        cur = conn.cursor()
-        cur.execute(sql)
-        rows = cur.fetchall()
-        conn.close()
-        return frozenset(tuple(r) for r in rows)
-    except:
-        return "ERROR"
+        start_time = time.time()
+        timeout_seconds = 10
+
+        def progress_callback():
+            # This function is called every 1000 SQLite virtual machine instructions
+            if time.time() - start_time > timeout_seconds:
+                # Raising an exception here tells SQLite to abort
+                return 1
+            return 0
+
+        try:
+            conn = sqlite3.connect(db)
+            
+            # 1000 is the number of instructions between calls.
+            # Increase this if it slows down performance too much.
+            conn.set_progress_handler(progress_callback, 5000)
+
+            cur = conn.cursor()
+            cur.execute(sql)
+            rows = cur.fetchall()
+            # rows = cur.fetchmany(500) # Only take first 100 rows for comparison
+            conn.close()
+            return frozenset(tuple(r) for r in rows)
+        except:
+            return "ERROR"
 
 
 def normalize_sql_for_embedding(sql: str) -> str:
@@ -403,6 +419,9 @@ def run_reranking(
 
     input_path = Path(input_path)
     output_path = Path(output_path)
+    
+    logger.info("Reranker Hyperparameters - TEMPERATURE: %.2f | MIN_EXECUTION_TRUST: %.2f | W_QSS: %.2f | W_CSA: %.2f | HYBRID_SOFT: %.2f | HYBRID_GMM: %.2f | HYBRID_EXEC: %.2f",    TEMPERATURE, MIN_EXECUTION_TRUST, W_QSS, W_CSA, HYBRID_SOFT, HYBRID_GMM, HYBRID_EXEC)
+
 
     with input_path.open("r", encoding="utf-8") as f:
         input_payload = json.load(f)

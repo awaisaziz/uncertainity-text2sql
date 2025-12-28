@@ -1,13 +1,13 @@
 {
   "dataset_path": "./spider_data/",
-  "default_provider": "grok",
-  "default_model": "grok-4-1-fast-non-reasoning",
+  "default_provider": "deepseek",
+  "default_model": "deepseek-chat",
   "num_sample": 100,
-  "num_query": 22,
-  "max_tokens": 6000,
+  "num_query": 35,
+  "max_tokens": 8000,
   "request_delay": 0.0,
   "mode": "rerank",
   "db_root": "spider_data/database",
-  "output_llm": "outputs/llm/grok-4-1-fast-non-reasoning_k=22.json",
-  "output_rerank": "outputs/reranked/grok-4-1-fast-non-reasoning_k=22_reranked.json"
+  "output_llm": "outputs/llm/deepseek_chat_k=35.json",
+  "output_rerank": "outputs/reranked/deepseek_chat_k=35_reranked.json"
 }

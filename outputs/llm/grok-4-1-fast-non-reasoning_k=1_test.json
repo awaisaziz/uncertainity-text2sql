@@ -1,0 +1,111 @@
+{
+  "dataset_path": "spider_data",
+  "default_provider": "grok",
+  "default_model": "grok-4-1-fast-non-reasoning",
+  "mode": "generate",
+  "num_sample": 10,
+  "num_query": 1,
+  "max_tokens": 6000,
+  "generated": [
+    {
+      "id": 0,
+      "question": "How many singers do we have?",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT count(*) FROM singer"
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "question": "What is the total number of singers?",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT count(*) FROM singer"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "Show name, country, age for all singers ordered by age from the oldest to the youngest.",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT Name, Country, Age FROM singer ORDER BY Age DESC"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "What are the names, countries, and ages for every singer in descending order of age?",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT Name, Country, Age FROM singer ORDER BY Age DESC"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "What is the average, minimum, and maximum age of all singers from France?",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT avg(Age), min(Age), max(Age) FROM singer WHERE Country  =  'France'"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "What is the average, minimum, and maximum age for all French singers?",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT avg(Age), min(Age), max(Age) FROM singer WHERE Country  =  'France'"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "Show the name and the release year of the song by the youngest singer.",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT Name, Song_release_year FROM singer WHERE Age = (SELECT MIN(Age) FROM singer)"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "What are the names and release years for all the songs of the youngest singer?",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT Song_Name, Song_release_year FROM singer WHERE Age  =  (SELECT MIN(Age) FROM singer)"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "question": "What are all distinct countries where singers above age 20 are from?",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT DISTINCT Country FROM singer WHERE Age > 20"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "question": "What are  the different countries with singers above age 20?",
+      "db_id": "concert_singer",
+      "candidates": [
+        {
+          "sql": "SELECT DISTINCT Country FROM singer WHERE Age > 20"
+        }
+      ]
+    }
+  ]
+}

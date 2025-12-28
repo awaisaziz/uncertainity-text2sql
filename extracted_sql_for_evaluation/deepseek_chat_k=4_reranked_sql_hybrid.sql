@@ -13,7 +13,7 @@ SELECT Country , count(*) FROM singer GROUP BY Country
 SELECT DISTINCT T1.Song_Name FROM singer AS T1 WHERE T1.Age > (SELECT avg(Age) FROM singer)
 SELECT DISTINCT T1.Song_Name FROM singer AS T1 WHERE T1.Age > (SELECT avg(T2.Age) FROM singer AS T2)
 SELECT Location, Name FROM stadium WHERE Capacity BETWEEN 5000 AND 10000
-SELECT Location, Name FROM stadium WHERE Capacity >= 5000 AND Capacity <= 10000
+SELECT Location, Name FROM stadium WHERE Capacity BETWEEN 5000 AND 10000
 SELECT max(Capacity) , avg(Capacity) FROM stadium
 SELECT avg(Capacity) , max(Capacity) FROM stadium
 SELECT Name , Capacity FROM stadium WHERE Average = ( SELECT max(Average) FROM stadium )
@@ -55,7 +55,7 @@ SELECT count(*) FROM Pets WHERE PetType = 'dog' AND PetID IN (SELECT PetID FROM 
 SELECT count(*) FROM Pets WHERE PetType = 'dog' AND PetID IN (SELECT PetID FROM Has_Pet WHERE StuID IN (SELECT StuID FROM Student WHERE Sex = 'F'))
 SELECT count(DISTINCT PetType) FROM Pets
 SELECT count(DISTINCT PetType) FROM Pets
-SELECT T1.Fname FROM Student AS T1 JOIN Has_Pet AS T2 ON T1.StuID = T2.StuID WHERE T2.PetID IN (SELECT T3.PetID FROM Pets AS T3 WHERE T3.PetType = 'cat' OR T3.PetType = 'dog')
+SELECT DISTINCT T1.Fname FROM Student AS T1 JOIN Has_Pet AS T2 ON T1.StuID = T2.StuID JOIN Pets AS T3 ON T2.PetID = T3.PetID WHERE T3.PetType IN ('cat', 'dog')
 SELECT T1.Fname FROM Student AS T1, Has_Pet AS T2, Pets AS T3 WHERE T1.StuID = T2.StuID AND T2.PetID = T3.PetID AND (T3.PetType = 'cat' OR T3.PetType = 'dog') GROUP BY T1.Fname
 SELECT T1.Fname FROM Student AS T1 JOIN Has_Pet AS T2 ON T1.StuID = T2.StuID JOIN Pets AS T3 ON T2.PetID = T3.PetID WHERE T3.PetType IN ('cat', 'dog') GROUP BY T1.StuID, T1.Fname HAVING COUNT(DISTINCT T3.PetType) = 2
 SELECT T1.Fname FROM Student AS T1 WHERE T1.StuID IN (SELECT T2.StuID FROM Has_Pet AS T2 JOIN Pets AS T3 ON T2.PetID = T3.PetID WHERE T3.PetType = 'cat') AND T1.StuID IN (SELECT T2.StuID FROM Has_Pet AS T2 JOIN Pets AS T3 ON T2.PetID = T3.PetID WHERE T3.PetType = 'dog')
@@ -74,7 +74,7 @@ SELECT PetType, avg(pet_age), max(pet_age) FROM Pets GROUP BY PetType
 SELECT PetType, avg(weight) FROM Pets GROUP BY PetType
 SELECT PetType , avg(weight) FROM Pets GROUP BY PetType
 SELECT T1.Fname, T1.Age FROM Student AS T1, Has_Pet AS T2 WHERE T1.StuID = T2.StuID GROUP BY T1.StuID, T1.Fname, T1.Age
-SELECT DISTINCT T1.Fname, T1.Age FROM Student AS T1, Has_Pet AS T2 WHERE T1.StuID = T2.StuID
+SELECT DISTINCT T1.Fname, T1.Age FROM Student AS T1 JOIN Has_Pet AS T2 ON T1.StuID = T2.StuID
 SELECT PetID FROM Has_Pet WHERE StuID IN (SELECT StuID FROM Student WHERE LName = 'Smith')
 SELECT PetID FROM Has_Pet WHERE StuID = (SELECT StuID FROM Student WHERE LName = 'Smith')
 SELECT T1.StuID , COUNT(T2.PetID) FROM Student AS T1 , Has_Pet AS T2 WHERE T1.StuID = T2.StuID GROUP BY T1.StuID
