@@ -1,9 +1,17 @@
 # VeriSQL: Uncertainty-Aware Text2SQL Verification and Reranking
 
 VeriSQL is an uncertainty-aware Text-to-SQL system that extends a simple generation pipeline into a full verification, scoring, and reranking framework.
-It reads the Spider dataset (dev.json), builds schema-aware prompts, generates multiple candidate SQL queries using the **deepseek-chat, grok-4-1-fast-non-reasoning** model, and then applies semantic similarity, consensus metrics, Gaussian Mixture Models (GMM), execution checks, and hybrid scoring to identify the most reliable SQL query.
+It reads the Spider dataset (dev.json), builds schema-aware prompts, generates multiple candidate SQL queries using the **deepseek-chat, grok-4-1-fast-non-reasoning** model. Rather than modifying model internals or fine-tuning for accuracy, VeriSQL focuses on **post-generation** reliability, leveraging semantic consensus, probabilistic calibration through Gaussian Mixture Models (GMM), and execution-level validation to select the most trustworthy SQL query.
 
 The system stores all generated candidates, computes detailed uncertainty scores (Softmax, GMM posterior, semantic entropy, execution agreement), and outputs both raw predictions and reranked results. Comprehensive logs are also captured for every run.
+
+## System Architecture
+
+The figure below illustrates the overall architecture of the VeriSQL framework.
+
+<p align="center"> <img src="figures/system_overview.jpg" alt="VeriSQL System Architecture" width="85%"> </p>
+
+Given a natural language question and database schema, the system constructs a schema-aware prompt and generates multiple candidate SQL queries using a black-box LLM. These candidates are then passed through a verification stage that computes semantic confidence, probabilistic calibration, and execution-level agreement signals. Finally, a hybrid reranking module integrates these uncertainty signals to select the most reliable SQL query.
 
 ## Project layout
 - `main.py` – entry point; orchestrates loading data, building prompts, and writing outputs.
