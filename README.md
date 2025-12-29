@@ -11,7 +11,7 @@ The figure below illustrates the overall architecture of the VeriSQL framework.
 
 <p align="center"> <img src="figures/system_overview.jpg" alt="VeriSQL System Architecture" width="85%"> </p>
 
-Given a natural language question and database schema, the system constructs a schema-aware prompt and generates multiple candidate SQL queries using a black-box LLM. These candidates are then passed through a verification stage that computes semantic confidence, probabilistic calibration, and execution-level agreement signals. Finally, a hybrid reranking module integrates these uncertainty signals to select the most reliable SQL query.
+Given a natural language question and database schema, the system constructs a schema-aware prompt and generates multiple candidate SQL queries using a black-box LLM. These candidates are then passed through a verification stage that computes semantic confidence, probabilistic calibration, and execution-level agreement signals. Finally, a hybrid reranking module integrates these uncertainty signals to enable robust and reliable selection of the final SQL query, mitigating the impact of spurious or inconsistent generation.
 
 ## Project layout
 - `main.py` – entry point; orchestrates loading data, building prompts, and writing outputs.
@@ -155,31 +155,91 @@ python evaluation.py --gold spider_data/dev_gold.sql --db spider_data/database -
 
 The script will create a temporary `.sql` file, run `spider_data/evaluate.py`, and print the reported metrics.
 
-## Experimental Results (deepseek-chat as SQL Generator)
+## Experimental Results
 
-In all the experiments, the **deepseek-chat** model is used as the underlying SQL generator. Different values of **k** indicate how many SQL candidates are sampled per query.
+This section reports empirical results for **VeriSQL** under different SQL samples and reranking strategies. Experiments are conducted using black-box LLMs as SQL generators, with uncertainty-aware verification applied post-generation.
 
-* **k = 1** serves as the **baseline**, representing the model’s default single output prediction without reranking or uncertainty modelling.
-* For **k > 1**, various reranking methods are applied to select the final SQL.
+Across all experiments:
 
-The table below reports execution accuracy and exact match scores using **first 100 queries sampled from the Spider 1.0 `dev.json` file**.
+* k denotes the number of SQL candidates sampled per query.
 
-### Performance Comparison Across Reranking Methods
+* **k = 1** serves as the **baseline**, corresponding to standard single-output decoding without reranking.
 
-| **Method (k)**       | **Execution Acc (%)** | **Exact Match (%)** |
-| -------------------- | --------------------- | ------------------- |
-| **Baseline (k = 1)** | 65                    | 45                  |
-| **GMM (k = 4)**      | 53                    | 43                  |
-| **Hybrid (k = 4)**   | 60                    | 41                  |
-| **Robust (k = 4)**   | 69                    | 46                  |
-| **GMM (k = 5)**      | 60                    | 48                  |
-| **Hybrid (k = 5)**   | 60                    | 48                  |
-| **Robust (k = 5)**   | 60                    | 45                  |
-| **GMM (k = 8)**      | 62                    | 45                  |
-| **Hybrid (k = 8)**   | 60                    | 43                  |
-| **Robust (k = 8)**   | **71**                | **55**              |
+* For **k > 1**, multiple candidates are generated and filtered using uncertainty-aware selection strategies.
 
-The **best-performing** method for each setting is shown in **bold**.
+Evaluation is performed on the first 100 queries from the Spider 1.0 `dev.json` file. Performance is reported using Execution Accuracy (EX) and Exact Match (EM).
+
+### Results with deepseek-chat as SQL Generator
+
+The table below reports execution accuracy and exact match scores on **first 100 queries** sampled from the **Spider 1.0 `dev.json` file** using **deepseek-chat** model within the VeriSQL framework.
+
+| **Method (k)**   | **Execution Acc (EX) (%)** | **Exact Match (EM) (%)** |
+| ---------------- | --------------------- | ------------------- |
+| Baseline (k = 1) | 65                    | 45                  |
+| Softmax (k = 4)  | 54                    | 45                  |
+| GMM (k = 4)      | 54                    | 45                  |
+| Hybrid (k = 4)   | 61                    | 43                  |
+| Robust (k = 4)   | 69                    | 46                  |
+| Softmax (k = 5)  | 60                    | 48                  |
+| GMM (k = 5)      | 60                    | 48                  |
+| Hybrid (k = 5)   | 60                    | 48                  |
+| Robust (k = 5)   | 60                    | 45                  |
+| Softmax (k = 8)  | 61                    | 45                  |
+| GMM (k = 8)      | 60                    | 44                  |
+| Hybrid (k = 8)   | 59                    | 42                  |
+| Robust (k = 8)   | 71                    | 56                  |
+| Softmax (k = 12) | 56                    | 38                  |
+| GMM (k = 12)     | 54                    | 36                  |
+| Hybrid (k = 12)  | 53                    | 34                  |
+| Robust (k = 12)  | **72**                | **54**              |
+| Softmax (k = 22) | 47                    | 21                  |
+| GMM (k = 22)     | 55                    | 31                  |
+| Hybrid (k = 22)  | 52                    | 26                  |
+| Robust (k = 22)  | 71                    | 54                  |
+| Softmax (k = 35) | 46                    | 21                  |
+| GMM (k = 35)     | 48                    | 28                  |
+| Hybrid (k = 35)  | 45                    | 20                  |
+| Robust (k = 35)  | 70                    | 52                  |
+
+The **best-performing** k value for **EX** metric in the above setting is shown in **bold**.
+
+### Results with grok-4-1-fast-non-reasoning as SQL Generator
+
+The table below reports execution accuracy and exact match scores on **first 100 queries** sampled from the **Spider 1.0 `dev.json` file** using **grok-4-1-fast-non-reasoning** model within the VeriSQL framework.
+
+| **Method (k)**   | **Execution Acc (EX) (%)** | **Exact Match (EM) (%)** |
+| ---------------- | --------------------- | ------------------- |
+| Baseline (k = 1) | 54                    | 32                  |
+| Softmax (k = 4)  | 44.4                  | 30.3                |
+| GMM (k = 4)      | 44.4                  | 30.3                |
+| Hybrid (k = 4)   | 48.5                  | 32.3                |
+| Robust (k = 4)   | 58.6                  | 36.4                |
+| Softmax (k = 5)  | 40                    | 29                  |
+| GMM (k = 5)      | 40                    | 29                  |
+| Hybrid (k = 5)   | 40                    | 30                  |
+| Robust (k = 5)   | 57                    | 39                  |
+| Softmax (k = 8)  | 36                    | 23                  |
+| GMM (k = 8)      | 36                    | 23                  |
+| Hybrid (k = 8)   | 37                    | 23                  |
+| Robust (k = 8)   | 59                    | 38                  |
+| Softmax (k = 12) | 35                    | 24                  |
+| GMM (k = 12)     | 33                    | 23                  |
+| Hybrid (k = 12)  | 38                    | 26                  |
+| Robust (k = 12)  | **65**                | **42**              |
+| Softmax (k = 22) | 23                    | 18                  |
+| GMM (k = 22)     | 23                    | 17                  |
+| Hybrid (k = 22)  | 26                    | 18                  |
+| Robust (k = 22)  | 57                    | 37                  |
+| Softmax (k = 35) | 21                    | 17                  |
+| GMM (k = 35)     | 21                    | 17                  |
+| Hybrid (k = 35)  | 29                    | 21                  |
+| Robust (k = 35)  | 53                    | 38                  |
+
+The **best-performing** k value for **EX** metric in the above setting is shown in **bold**.
+
+## Findings
+
+Experimental results show that **k = 12** yields the strongest overall performance for the VeriSQL framework across both **deepseek-chat** and **grok-4-1-fast-non-reasoning** models. This suggests that moderate candidate diversity is sufficient to enable reliable semantic consensus and execution-based verification without introducing excessive noise.
 
 ## Dataset Download
 
